@@ -17,15 +17,13 @@ body {
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.7);
   min-height: 100vh;
   padding: 20px;
 }
 
-h1 {
-  margin-top: 40px;
-  font-size: 28px;
-  letter-spacing: 2px;
+h1, h2 {
+  margin-top: 30px;
 }
 
 button {
@@ -37,40 +35,115 @@ button {
   font-size: 18px;
   color: white;
   border-radius: 12px;
-  cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.9;
-}
-
-.info {
-  margin-top: 30px;
-  font-size: 14px;
-  opacity: 0.8;
+.section {
+  margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
+
 <div class="overlay">
 
-<h1>MENU</h1>
+<h1>CHOISIS TON SECTEUR</h1>
 
-<button onclick="alert('Menu 69 sélectionné')">
-Menu 69 – Villefranche-sur-Saône
-</button>
+<button onclick="showSector('69')">Menu 69 - Villefranche</button>
+<button onclick="showSector('71')">Menu 71 - Mâcon</button>
 
-<button onclick="alert('Menu 71 sélectionné')">
-Menu 71 – Mâcon
-</button>
-
-<div class="info">
-Sur place : 07:00 → 00:00<br>
-Livraison selon conditions<br><br>
-Paiement en main propre
-</div>
+<div id="content"></div>
 
 </div>
+
+<script>
+
+function showSector(sector) {
+
+if(sector === "69"){
+document.getElementById("content").innerHTML = `
+<h2>Menu 69</h2>
+<p>Sur place : Villefranche-sur-Saône</p>
+<p>Livraison à partir de 15h</p>
+
+<div class="section">
+<h3>Jaune mousseux</h3>
+<p>Sur place :</p>
+10 meuje - 40€<br>
+25 meuje - 80€<br>
+50 meuje - 140€<br>
+100 meuje - 220€<br>
+<p>Livraison :</p>
+10 meuje - 50€<br>
+25 meuje - 100€<br>
+50 meuje - 160€<br>
+100 meuje - 240€<br>
+</div>
+
+<div class="section">
+<h3>Filtre x3 exotique</h3>
+<p>Sur place :</p>
+3,5 meuje - 30€<br>
+10 meuje - 60€<br>
+20 meuje - 110€<br>
+50 meuje - 220€<br>
+100 meuje - 400€<br>
+<p>Livraison :</p>
+3,5 meuje - 40€<br>
+10 meuje - 70€<br>
+20 meuje - 130€<br>
+50 meuje - 240€<br>
+100 meuje - 430€<br>
+</div>
+
+<p>Frais livraison : 10€ par tranche de 15km</p>
+`;
+}
+
+if(sector === "71"){
+document.getElementById("content").innerHTML = `
+<h2>Menu 71</h2>
+<p>Sur place : Mâcon</p>
+<p>Tournées : 16h / 19h / 21h30</p>
+
+<div class="section">
+<h3>Jaune mousseux</h3>
+<p>Sur place :</p>
+10 meuje - 50€<br>
+25 meuje - 100€<br>
+50 meuje - 150€<br>
+100 meuje - 230€<br>
+<p>Livraison :</p>
+10 meuje - 60€<br>
+25 meuje - 110€<br>
+50 meuje - 180€<br>
+100 meuje - 260€<br>
+</div>
+
+<div class="section">
+<h3>Filtre x3 exotique</h3>
+<p>Sur place :</p>
+3,5 meuje - 30€<br>
+10 meuje - 60€<br>
+20 meuje - 110€<br>
+50 meuje - 230€<br>
+100 meuje - 420€<br>
+<p>Livraison :</p>
+3,5 meuje - 40€<br>
+10 meuje - 80€<br>
+20 meuje - 120€<br>
+50 meuje - 250€<br>
+100 meuje - 450€<br>
+</div>
+
+<p>Hors tournée ou fermé : +60€</p>
+<p>Frais livraison : 10€ par tranche de 15km</p>
+`;
+}
+
+}
+
+</script>
+
 </body>
 </html>
