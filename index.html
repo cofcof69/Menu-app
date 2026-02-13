@@ -1,715 +1,273 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Menu 69 / 71</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MENU</title>
 
-  <style>
-    body{
-      margin:0;
-      font-family: Arial, sans-serif;
-      color:#fff;
-      background: url('IMG_7404.jpeg') no-repeat center center fixed;
-      background-size: cover;
-    }
-    .overlay{
-      min-height:100vh;
-      background: rgba(0,0,0,.72);
-      padding: 16px 14px 28px;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    h1{margin: 10px 0 6px; letter-spacing: 2px; text-align:center}
-    .sub{opacity:.85; font-size:13px; text-align:center; margin-bottom: 10px}
-    .card{
-      background: rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.15);
-      border-radius: 14px;
-      padding: 12px;
-      margin: 12px 0;
-    }
-    .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
-    .btn{
-      width:100%;
-      background:#1e90ff;
-      border:none;
-      padding:14px 12px;
-      margin: 8px 0;
-      font-size:18px;
-      color:#fff;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:800;
-    }
-    .btn.secondary{
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.2);
-    }
-    .btn.ghost{
-      background: transparent;
-      border:1px solid rgba(255,255,255,.2);
-    }
-    .btn.small{font-size:14px; padding:10px 12px; width:auto}
-    .pill{
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.2);
-      padding: 10px 12px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight:900;
-      font-size:13px;
-      user-select:none;
-    }
-    .pill.active{background: rgba(30,144,255,.95)}
-    .muted{opacity:.82; font-size:13px}
-    .divider{height:1px; background: rgba(255,255,255,.15); margin: 10px 0}
-
-    .item{
-      display:flex; justify-content:space-between; align-items:center;
-      padding: 10px 0; border-bottom:1px solid rgba(255,255,255,.08);
-    }
-    .item:last-child{border-bottom:none}
-    .name{font-weight:900}
-    .price{opacity:.9; font-weight:900}
-    .qty{display:flex; align-items:center; gap:8px}
-    .qbtn{
-      width:34px; height:34px; border-radius:10px;
-      background: rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.2);
-      color:#fff; font-weight:900; font-size:18px;
-      cursor:pointer;
-    }
-    .qnum{min-width:18px; text-align:center; font-weight:900}
-    textarea, input{
-      width:100%;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.2);
-      background: rgba(0,0,0,.35);
-      color:#fff;
-      padding: 12px;
-      font-size: 14px;
-      outline:none;
-    }
-    .sumrow{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:6px 0;
-    }
-    .sumrow strong{font-size:16px}
-    .total strong{font-size:20px}
-    .hidden{display:none}
-    .center{text-align:center}
-    .ok{color:#7bed9f; font-weight:900}
-    .warn{color:#ffa502; font-weight:900}
-  </style>
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:#fff;
+  background:url('IMG_7404.jpeg') no-repeat center center fixed;
+  background-size:cover;
+}
+.overlay{
+  background:rgba(0,0,0,0.75);
+  min-height:100vh;
+  padding:20px;
+  max-width:650px;
+  margin:auto;
+}
+h1{text-align:center;margin-top:10px}
+.section{
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.2);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+  background:#1e90ff;
+  color:white;
+}
+button.secondary{
+  background:rgba(255,255,255,0.15);
+}
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.3);
+  background:rgba(0,0,0,0.4);
+  color:white;
+  margin-top:8px;
+}
+.hidden{display:none}
+.center{text-align:center}
+.small{font-size:13px;opacity:0.8}
+</style>
 </head>
 
 <body>
 <div class="overlay">
-  <h1>MENU</h1>
-  <div class="sub" id="subline">Paiement : main propre • Frais distance : 10€ / 15km (calcul vendeur)</div>
 
-  <!-- STEP 1: Secteur -->
-  <div class="card" id="stepSector">
-    <div class="center" style="font-weight:900; margin-bottom:8px;">Choisis ton secteur</div>
-    <button class="btn" onclick="selectSector('69')">Menu 69 — Villefranche-sur-Saône</button>
-    <button class="btn" onclick="selectSector('71')">Menu 71 — Mâcon</button>
-    <div class="muted center" style="margin-top:8px;">
-      Sur place : 07:00 → 00:00<br/>
-      69 livraison : à partir de 15h • 71 livraison : tournées
-    </div>
-  </div>
+<h1>MENU OFFICIEL</h1>
 
-  <!-- STEP 2: Rubrique -->
-  <div class="card hidden" id="stepRubric">
-    <div class="center" style="font-weight:900; margin-bottom:8px;" id="rubricTitle">Choisis la rubrique</div>
-    <div class="row">
-      <div class="pill" id="pillPickup" onclick="selectMode('pickup')">🏢 Sur place</div>
-      <div class="pill" id="pillDelivery" onclick="selectMode('delivery')">🚘 Livraison</div>
-    </div>
-    <div class="muted center" id="rubricInfo" style="margin-top:10px;"></div>
-    <button class="btn ghost" onclick="resetAll()">← Retour</button>
-  </div>
+<!-- MENU PRINCIPAL -->
+<div class="section">
+  <button onclick="showSection('order')">Commander</button>
+  <button class="secondary" onclick="showSection('lottery')">🎰 Roue</button>
+  <button class="secondary" onclick="showSection('referral')">Programme Partenaire</button>
+  <button class="secondary" onclick="showSection('contest')">Concours 15 jours</button>
+  <button class="secondary" onclick="showSection('postal')">📦 Envoi postal</button>
+  <button class="secondary" onclick="showSection('apply')">Rejoindre l'équipe</button>
+  <button class="secondary" onclick="showSection('support')">Service Client</button>
+  <button class="secondary" onclick="shareSite()">Partager ce site</button>
+</div>
 
-  <!-- STEP 3: Livraison options (adresse + tournée/premium selon secteur) -->
-  <div class="card hidden" id="stepDeliveryOptions">
-    <div class="center" style="font-weight:900; margin-bottom:8px;">Livraison</div>
+<!-- COMMANDE -->
+<div id="order" class="section hidden">
+  <h3>Commande</h3>
+  <select id="sector">
+    <option value="69">Menu 69</option>
+    <option value="71">Menu 71</option>
+  </select>
 
-    <div id="delivery71Tours" class="hidden">
-      <div class="muted" style="margin-bottom:8px;">
-        Menu 71 : tournées <b>16:00</b> / <b>19:00</b> / <b>21:30</b><br/>
-        Option <b>hors tournée / hors horaires</b> : +60€
-      </div>
-      <div class="row">
-        <div class="pill" id="tour16" onclick="selectTour('16:00')">16:00</div>
-        <div class="pill" id="tour19" onclick="selectTour('19:00')">19:00</div>
-        <div class="pill" id="tour2130" onclick="selectTour('21:30')">21:30</div>
-      </div>
-      <div style="margin-top:10px;">
-        <div class="pill" id="premiumPill" onclick="togglePremium()">★ Hors tournée +60€</div>
-      </div>
-      <div class="muted" style="margin-top:10px;">
-        Si hors tournée, tu peux indiquer une heure souhaitée dans “Note”.
-      </div>
-    </div>
+  <select id="mode">
+    <option value="pickup">Sur place</option>
+    <option value="delivery">Livraison</option>
+  </select>
 
-    <div class="divider"></div>
+  <textarea id="details" placeholder="Détail de la commande..."></textarea>
 
-    <label class="muted">Adresse (obligatoire en livraison)</label>
-    <textarea id="address" rows="3" placeholder="Adresse complète + infos (étage, code...)"></textarea>
+  <button onclick="sendOrder()">COMMANDER</button>
+<!-- LOTERIE -->
+<div id="lottery" class="section hidden">
+  <h3>🎰 Roue Hebdomadaire</h3>
+  <p class="small">
+  1 tour maximum par semaine.<br>
+  Gain valable uniquement après validation réelle du livreur.
+  </p>
 
-    <label class="muted" style="display:block; margin-top:10px;">Note (optionnel)</label>
-    <input id="note" placeholder="Ex: heure souhaitée, détails..." />
+  <input id="validationCode" placeholder="Code validation livreur">
+  <button onclick="validateAndSpin()">Valider & Lancer</button>
 
-    <div class="muted" style="margin-top:10px;">
-      Frais distance : <b>10€ / 15km</b> (calcul vendeur).<br/>
-      La direction se réserve le droit d’ajouter des frais selon km.
-    </div>
+  <div id="lotteryResult" class="center" style="margin-top:10px;font-weight:bold;"></div>
+</div>
 
-    <button class="btn" onclick="goToMenu()">Continuer</button>
-    <button class="btn ghost" onclick="backToRubric()">← Retour</button>
-  </div>
+<!-- PARRAINAGE -->
+<div id="referral" class="section hidden">
+  <h3>Programme Partenaire</h3>
+  <p>Ton code :</p>
+  <div id="myCode" style="font-weight:bold;"></div>
+  <p>Filleuls validés : <span id="refCount">0</span></p>
+  <p id="rewardStatus"></p>
+  <button onclick="simulateReferral()">Simuler validation filleul (test)</button>
+</div>
 
-  <!-- STEP 4: Menu (catégories + items + panier) -->
-  <div class="card hidden" id="stepMenu">
-    <div class="center" style="font-weight:900; margin-bottom:8px;" id="menuTitle">Menu</div>
+<!-- CONCOURS -->
+<div id="contest" class="section hidden">
+  <h3>Concours Créatif</h3>
+  <p>
+  Poste ta meilleure pub.<br>
+  Tirage tous les 15 jours.<br>
+  Lot change à chaque session.
+  </p>
+  <button onclick="contactContest()">Participer</button>
+</div>
 
-    <div class="row" id="categoryRow"></div>
+<!-- ENVOI POSTAL -->
+<div id="postal" class="section hidden">
+  <h3>Envoi Postal France</h3>
+  <textarea id="postalDetails" placeholder="Adresse complète + contenu commande"></textarea>
+  <button onclick="sendPostal()">Envoyer demande</button>
+</div>
 
-    <div class="divider"></div>
+<!-- RECRUTEMENT -->
+<div id="apply" class="section hidden">
+  <h3>Rejoindre l'équipe</h3>
+  <textarea id="applyText" placeholder="Explique ta candidature..."></textarea>
+  <button onclick="sendApplication()">Envoyer candidature</button>
+</div>
 
-    <div id="itemsList"></div>
+<!-- SUPPORT -->
+<div id="support" class="section hidden">
+  <h3>Service Client</h3>
+  <textarea id="supportText" placeholder="Message..."></textarea>
+  <button onclick="sendSupport()">Envoyer</button>
+</div>
 
-    <div class="divider"></div>
-
-    <div class="sumrow"><span>Sous-total</span><strong id="subtotal">0€</strong></div>
-    <div class="sumrow hidden" id="premiumRow"><span>Hors tournée</span><strong>+60€</strong></div>
-    <div class="sumrow"><span>Frais distance</span><strong class="muted">à ajouter (vendeur)</strong></div>
-    <div class="sumrow total"><span>TOTAL (hors distance)</span><strong id="total">0€</strong></div>
-
-    <div class="muted" style="margin-top:8px;">
-      Paiement : main propre.
-    </div>
-
-    <button class="btn" onclick="submitOrder()">COMMANDER</button>
-    <button class="btn secondary" onclick="clearCart()">Vider panier</button>
-    <button class="btn ghost" onclick="backFromMenu()">← Retour</button>
-  </div>
-
-  <!-- STEP 5: Loterie (après commande validée) -->
-  <div class="card hidden" id="stepLottery">
-    <div class="center" style="font-weight:900; margin-bottom:8px;">🎰 Tirage de fin de commande</div>
-    <div class="muted center">Certains lots sont très rares. 1 tirage par commande.</div>
-
-    <button class="btn" id="spinBtn" onclick="spinAfterOrder()">Lancer le tirage</button>
-
-    <div id="lotteryResult" class="center" style="margin-top:10px; font-weight:900;"></div>
-    <div id="lotteryCode" class="center muted" style="margin-top:6px;"></div>
-
-    <button class="btn ghost" onclick="restart()">Revenir au menu</button>
-  </div>
 </div>
 
 <script>
-  // Telegram
-  const tg = window.Telegram?.WebApp;
-  try { tg?.ready?.(); } catch(e) {}
+const WHATSAPP_NUMBER = "33600000000"; // NUMERO TEST
 
-  const EURO = (n) => `${n}€`;
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 
-  // Données (secteur → mode → catégories/items)
-  const DATA = {
-    "69": {
-      label: "Menu 69 — Villefranche-sur-Saône",
-      pickupHours: "07:00 → 00:00",
-      deliveryInfo: "Livraison à partir de 15h (hors horaires: commande possible, programmée au prochain créneau)",
-      categories: [
-        {
-          name: "Jaune mousseux",
-          items: [
-            { name: "10 meuje", pickup: 40, delivery: 50 },
-            { name: "25 meuje", pickup: 80, delivery: 100 },
-            { name: "50 meuje", pickup: 140, delivery: 160 },
-            { name: "100 meuje", pickup: 220, delivery: 240 }
-          ]
-        },
-        {
-          name: "Filtre x3 exotique",
-          items: [
-            { name: "3,5 meuje", pickup: 30, delivery: 40 },
-            { name: "10 meuje", pickup: 60, delivery: 70 },
-            { name: "20 meuje", pickup: 110, delivery: 130 },
-            { name: "50 meuje", pickup: 220, delivery: 240 },
-            { name: "100 meuje", pickup: 400, delivery: 430 }
-          ]
-        },
-        {
-          name: "Menu coco",
-          items: [
-            { name: "1 meuje", pickup: 50, delivery: 60 },
-            { name: "2 meuje", pickup: 90, delivery: 100 },
-            { name: "5 meuje", pickup: 200, delivery: 220 },
-            { name: "10 meuje", pickup: 350, delivery: 370 }
-          ]
-        }
-      ]
-    },
-    "71": {
-      label: "Menu 71 — Mâcon",
-      pickupHours: "07:00 → 00:00",
-      deliveryInfo: "Tournées : 16h / 19h / 21h30 • Hors tournée +60€ (même hors horaires)",
-      categories: [
-        {
-          name: "Jaune mousseux",
-          items: [
-            { name: "10 meuje", pickup: 50, delivery: 60 },
-            { name: "25 meuje", pickup: 100, delivery: 110 },
-            { name: "50 meuje", pickup: 150, delivery: 180 },
-            { name: "100 meuje", pickup: 230, delivery: 260 }
-          ]
-        },
-        {
-          name: "Filtre x3 exotique",
-          items: [
-            { name: "3,5 meuje", pickup: 30, delivery: 40 },
-            { name: "10 meuje", pickup: 60, delivery: 80 },
-            { name: "20 meuje", pickup: 110, delivery: 120 },
-            { name: "50 meuje", pickup: 230, delivery: 250 },
-            { name: "100 meuje", pickup: 420, delivery: 450 }
-          ]
-        },
-        {
-          name: "Menu coco",
-          items: [
-            { name: "1 meuje", pickup: 50, delivery: 60 },
-            { name: "2 meuje", pickup: 90, delivery: 120 },
-            { name: "5 meuje", pickup: 200, delivery: 220 },
-            { name: "10 meuje", pickup: 350, delivery: 380 }
-          ]
-        }
-      ]
-    }
-  };
+function sendOrder(){
+  const sector = document.getElementById("sector").value;
+  const mode = document.getElementById("mode").value;
+  const details = document.getElementById("details").value;
+  const orderId = "ORD-" + Date.now();
 
-  // State
-  let sector = null;          // "69" | "71"
-  let mode = null;            // "pickup" | "delivery"
-  let activeCat = 0;
-  let deliveryTour = null;    // "16:00" | "19:00" | "21:30" | null
-  let premium = false;        // hors tournée +60 (only 71 delivery)
-  let lastOrderPayload = null;
-  let currentOrderId = null;
+  const message = `
+Nouvelle commande
+ID: ${orderId}
+Secteur: ${sector}
+Mode: ${mode}
+Détails: ${details}
 
-  // cart key = `${catIdx}:${itemIdx}` => qty
-  const cart = new Map();
+Validation roue obligatoire après accord livreur.
+`;
 
-  // UI refs
-  const stepSector = document.getElementById("stepSector");
-  const stepRubric = document.getElementById("stepRubric");
-  const stepDeliveryOptions = document.getElementById("stepDeliveryOptions");
-  const stepMenu = document.getElementById("stepMenu");
-  const stepLottery = document.getElementById("stepLottery");
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+}
 
-  const rubricTitle = document.getElementById("rubricTitle");
-  const rubricInfo = document.getElementById("rubricInfo");
-  const pillPickup = document.getElementById("pillPickup");
-  const pillDelivery = document.getElementById("pillDelivery");
+/* ===== LOTERIE ===== */
 
-  const menuTitle = document.getElementById("menuTitle");
-  const categoryRow = document.getElementById("categoryRow");
-  const itemsList = document.getElementById("itemsList");
-  const subtotalEl = document.getElementById("subtotal");
-  const totalEl = document.getElementById("total");
-  const premiumRow = document.getElementById("premiumRow");
+function validateAndSpin(){
+  const code = document.getElementById("validationCode").value;
+  const lastSpin = localStorage.getItem("lastSpin");
+  const now = Date.now();
 
-  const delivery71Tours = document.getElementById("delivery71Tours");
-  const premiumPill = document.getElementById("premiumPill");
-  const addrEl = document.getElementById("address");
-  const noteEl = document.getElementById("note");
-
-  const lotteryResult = document.getElementById("lotteryResult");
-  const lotteryCode = document.getElementById("lotteryCode");
-  const spinBtn = document.getElementById("spinBtn");
-
-  function hideAll() {
-    stepSector.classList.add("hidden");
-    stepRubric.classList.add("hidden");
-    stepDeliveryOptions.classList.add("hidden");
-    stepMenu.classList.add("hidden");
-    stepLottery.classList.add("hidden");
+  if(lastSpin && (now - lastSpin < 7*24*60*60*1000)){
+    document.getElementById("lotteryResult").innerText =
+    "Déjà joué cette semaine.";
+    return;
   }
 
-  function resetAll() {
-    sector = null; mode = null; activeCat = 0;
-    deliveryTour = null; premium = false;
-    lastOrderPayload = null; currentOrderId = null;
-    cart.clear();
-    addrEl.value = ""; noteEl.value = "";
-    setActivePill(pillPickup, false);
-    setActivePill(pillDelivery, false);
-    clearToursUI();
-    hideAll();
-    stepSector.classList.remove("hidden");
+  if(code !== "VALID123"){ // CODE TEST
+    document.getElementById("lotteryResult").innerText =
+    "Code invalide.";
+    return;
   }
 
-  function restart() {
-    // Retour au menu (secteur + mode déjà choisis)
-    lastOrderPayload = null;
-    currentOrderId = null;
-    lotteryResult.textContent = "";
-    lotteryCode.textContent = "";
-    spinBtn.disabled = false;
-    hideAll();
-    // Revenir au menu (on repart de rubriques pour recommencer propre)
-    stepRubric.classList.remove("hidden");
-  }
+  localStorage.setItem("lastSpin", now);
 
-  function setActivePill(el, on) {
-    el.classList.toggle("active", !!on);
-  }
+  const prizes = [
+    {label:"🎁 100 meuje filtre", p:0.05},
+    {label:"🎁 -90% catalogue", p:0.05},
+    {label:"🎁 Livraison gratuite", p:10},
+    {label:"🎁 Starter pack", p:25},
+    {label:"😅 Pas gagné", p:64.9}
+  ];
 
-  function clearToursUI() {
-    ["tour16","tour19","tour2130"].forEach(id => document.getElementById(id).classList.remove("active"));
-    premiumPill.classList.remove("active");
-  }
-
-  function selectSector(s) {
-    sector = s;
-    mode = null;
-    activeCat = 0;
-    deliveryTour = null;
-    premium = false;
-    cart.clear();
-    addrEl.value = ""; noteEl.value = "";
-    clearToursUI();
-
-    hideAll();
-    stepRubric.classList.remove("hidden");
-
-    rubricTitle.textContent = DATA[sector].label;
-    rubricInfo.innerHTML =
-      `🏢 Sur place : ${DATA[sector].pickupHours}<br/>` +
-      `🚘 ${DATA[sector].deliveryInfo}`;
-  }
-
-  function selectMode(m) {
-    mode = m;
-    setActivePill(pillPickup, mode === "pickup");
-    setActivePill(pillDelivery, mode === "delivery");
-
-    if (mode === "delivery") {
-      // options livraison
-      hideAll();
-      stepDeliveryOptions.classList.remove("hidden");
-      delivery71Tours.classList.toggle("hidden", sector !== "71");
-      if (sector !== "71") {
-        deliveryTour = null;
-        premium = false;
-      } else {
-        // default tour = 16:00 (mais l'utilisateur choisit)
-        deliveryTour = deliveryTour || "16:00";
-        selectTour(deliveryTour);
-      }
-    } else {
-      // direct menu
-      goToMenu();
+  const r = Math.random()*100;
+  let sum = 0;
+  for(let prize of prizes){
+    sum += prize.p;
+    if(r<=sum){
+      document.getElementById("lotteryResult").innerText =
+      prize.label + " (valable après vérification)";
+      break;
     }
   }
+}
 
-  function backToRubric() {
-    hideAll();
-    stepRubric.classList.remove("hidden");
-  }
+/* ===== PARRAINAGE ===== */
 
-  function selectTour(t) {
-    if (sector !== "71") return;
-    deliveryTour = t;
-    // highlight UI
-    clearToursUI();
-    if (t === "16:00") document.getElementById("tour16").classList.add("active");
-    if (t === "19:00") document.getElementById("tour19").classList.add("active");
-    if (t === "21:30") document.getElementById("tour2130").classList.add("active");
-    // re-apply premium
-    if (premium) premiumPill.classList.add("active");
-  }
+let refCount = localStorage.getItem("refCount") || 0;
+document.getElementById("refCount").innerText = refCount;
 
-  function togglePremium() {
-    if (sector !== "71" || mode !== "delivery") return;
-    premium = !premium;
-    premiumPill.classList.toggle("active", premium);
-  }
+const myCode = "REF-" + Math.random().toString(36).substring(2,8).toUpperCase();
+document.getElementById("myCode").innerText = myCode;
 
-  function goToMenu() {
-    // si livraison => adresse obligatoire
-    if (mode === "delivery") {
-      const addr = (addrEl.value || "").trim();
-      if (!addr) {
-        tg?.showAlert?.("Adresse obligatoire pour la livraison.");
-        return;
-      }
-      if (sector === "71" && !deliveryTour && !premium) {
-        tg?.showAlert?.("Choisis une tournée (ou hors tournée).");
-        return;
-      }
-    }
+function simulateReferral(){
+  refCount++;
+  localStorage.setItem("refCount", refCount);
+  document.getElementById("refCount").innerText = refCount;
+  updateReward();
+}
 
-    hideAll();
-    stepMenu.classList.remove("hidden");
-    renderMenu();
-  }
+function updateReward(){
+  let text="";
+  if(refCount>=10) text="Récompense: -100€";
+  else if(refCount>=5) text="-30€ débloqué";
+  else if(refCount>=3) text="-20€ débloqué";
+  else text="Prochain palier: 3 filleuls";
+  document.getElementById("rewardStatus").innerText=text;
+}
+updateReward();
 
-  function backFromMenu() {
-    if (mode === "delivery") {
-      hideAll();
-      stepDeliveryOptions.classList.remove("hidden");
-    } else {
-      hideAll();
-      stepRubric.classList.remove("hidden");
-    }
-  }
+/* ===== AUTRES SECTIONS ===== */
 
-  function clearCart() {
-    cart.clear();
-    renderMenu();
-  }
+function shareSite(){
+  const link = window.location.href;
+  window.open(`https://wa.me/?text=${encodeURIComponent("Découvre le site : "+link)}`);
+}
 
-  function renderMenu() {
-    const sec = DATA[sector];
-    menuTitle.textContent = `${sec.label} — ${mode === "pickup" ? "Sur place" : "Livraison"}`;
+function contactContest(){
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Je participe au concours`);
+}
 
-    // premium row visible?
-    const premFee = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    premiumRow.classList.toggle("hidden", premFee === 0);
+function sendPostal(){
+  const txt=document.getElementById("postalDetails").value;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Envoi postal : "+txt)}`);
+}
 
-    // categories
-    categoryRow.innerHTML = "";
-    sec.categories.forEach((c, idx) => {
-      const p = document.createElement("div");
-      p.className = "pill" + (idx === activeCat ? " active" : "");
-      p.textContent = c.name;
-      p.onclick = () => { activeCat = idx; renderMenu(); };
-      categoryRow.appendChild(p);
-    });
+function sendApplication(){
+  const txt=document.getElementById("applyText").value;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Candidature : "+txt)}`);
+}
 
-    // items
-    itemsList.innerHTML = "";
-    const cat = sec.categories[activeCat];
-
-    cat.items.forEach((it, itemIdx) => {
-      const key = `${activeCat}:${itemIdx}`;
-      const qty = cart.get(key) || 0;
-      const price = mode === "pickup" ? it.pickup : it.delivery;
-
-      const row = document.createElement("div");
-      row.className = "item";
-
-      const left = document.createElement("div");
-      left.innerHTML = `<div class="name">${it.name}</div><div class="price">${EURO(price)}</div>`;
-
-      const right = document.createElement("div");
-      right.className = "qty";
-
-      const minus = document.createElement("button");
-      minus.className = "qbtn";
-      minus.textContent = "−";
-      minus.onclick = () => {
-        const q = cart.get(key) || 0;
-        if (q <= 0) return;
-        if (q === 1) cart.delete(key);
-        else cart.set(key, q - 1);
-        renderMenu();
-      };
-
-      const num = document.createElement("div");
-      num.className = "qnum";
-      num.textContent = qty;
-
-      const plus = document.createElement("button");
-      plus.className = "qbtn";
-      plus.textContent = "+";
-      plus.onclick = () => {
-        const q = cart.get(key) || 0;
-        cart.set(key, q + 1);
-        renderMenu();
-      };
-
-      right.appendChild(minus);
-      right.appendChild(num);
-      right.appendChild(plus);
-
-      row.appendChild(left);
-      row.appendChild(right);
-      itemsList.appendChild(row);
-    });
-
-    // totals
-    const sub = computeSubtotal();
-    const prem = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    subtotalEl.textContent = EURO(sub);
-    totalEl.textContent = EURO(sub + prem);
-  }
-
-  function computeSubtotal() {
-    const sec = DATA[sector];
-    let sum = 0;
-    for (const [key, qty] of cart.entries()) {
-      const [cIdx, iIdx] = key.split(":").map(Number);
-      const item = sec.categories[cIdx].items[iIdx];
-      const price = mode === "pickup" ? item.pickup : item.delivery;
-      sum += price * qty;
-    }
-    return sum;
-  }
-
-  // ====== COMMAND (sendData to bot) ======
-  function submitOrder() {
-    const sub = computeSubtotal();
-    if (sub <= 0) {
-      tg?.showAlert?.("Ajoute au moins un produit.");
-      return;
-    }
-
-    const sec = DATA[sector];
-    const items = [];
-    for (const [key, qty] of cart.entries()) {
-      const [cIdx, iIdx] = key.split(":").map(Number);
-      const cat = sec.categories[cIdx];
-      const item = cat.items[iIdx];
-      const unit = mode === "pickup" ? item.pickup : item.delivery;
-      items.push({
-        cat: cat.name,
-        name: item.name,
-        qty,
-        unit,
-        line: unit * qty
-      });
-    }
-
-    const premFee = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    const total = sub + premFee;
-
-    currentOrderId = `ORD-${Date.now()}`;
-
-    const payload = {
-      type: "order",
-      orderId: currentOrderId,
-      sector,
-      sectorLabel: sec.label,
-      mode, // pickup/delivery
-      pickupHours: sec.pickupHours,
-      delivery: {
-        tour: (sector === "71" && mode === "delivery") ? (premium ? null : (deliveryTour || null)) : null,
-        premium: (sector === "71" && mode === "delivery") ? premium : false,
-        premiumFee: (sector === "71" && mode === "delivery" && premium) ? 60 : 0,
-        address: (mode === "delivery") ? (addrEl.value || "").trim() : "",
-        note: (mode === "delivery") ? (noteEl.value || "").trim() : ""
-      },
-      pricing: {
-        currency: "EUR",
-        subtotal: sub,
-        totalWithoutDistance: total,
-        distanceRule: "10€/15km (calcul vendeur)",
-        extraRule: "La direction peut ajouter des frais selon km"
-      },
-      payment: "main_propre",
-      items,
-      createdAt: new Date().toISOString()
-    };
-
-    lastOrderPayload = payload;
-
-    // Send to Telegram bot if inside Telegram
-    if (tg?.sendData) {
-      tg.sendData(JSON.stringify(payload));
-      tg.showAlert?.("Commande envoyée ✅");
-    } else {
-      alert("Commande prête (ouvre depuis Telegram pour l’envoyer automatiquement).");
-      console.log(payload);
-    }
-
-    // After order => show lottery screen
-    hideAll();
-    stepLottery.classList.remove("hidden");
-    lotteryResult.textContent = "";
-    lotteryCode.textContent = "";
-    spinBtn.disabled = false;
-  }
-
-  // ====== LOTTERY (after order) ======
-  function makeCode(prefix="WIN") {
-    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-    let s = "";
-    for (let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
-    return `${prefix}-${s}`;
-  }
-
-  function weightedPick(prizes) {
-    const total = prizes.reduce((s, x) => s + x.p, 0);
-    const r = Math.random() * total;
-    let acc = 0;
-    for (const x of prizes) {
-      acc += x.p;
-      if (r <= acc) return x;
-    }
-    return prizes[prizes.length - 1];
-  }
-
-  function canSpin(orderId) {
-    return localStorage.getItem(`lottery:spun:${orderId}`) !== "1";
-  }
-  function markSpun(orderId) {
-    localStorage.setItem(`lottery:spun:${orderId}`, "1");
-  }
-
-  function spinAfterOrder() {
-    if (!currentOrderId) {
-      tg?.showAlert?.("Aucune commande trouvée.");
-      return;
-    }
-    if (!canSpin(currentOrderId)) {
-      lotteryResult.textContent = "✅ Tirage déjà effectué pour cette commande.";
-      spinBtn.disabled = true;
-      return;
-    }
-
-    // Probabilités internes (non affichées)
-    const prizes = [
-      { id: "WIN_100_FILTER", label: "🎁 Gagné : 100 meuje filtre", p: 0.05 },
-      { id: "WIN_90_OFF", label: "🎁 Gagné : -90% sur tout le catalogue", p: 0.05 },
-      { id: "WIN_FREE_DELIVERY", label: "🎁 Gagné : Livraison gratuite", p: 10.0 },
-      { id: "WIN_STARTER", label: "🎁 Gagné : Starter pack (feuille + briquet + jeux à gratter)", p: 25.0 },
-      { id: "LOSE", label: "😅 Pas gagné cette fois. Merci quand même !", p: 64.9 }
-    ];
-
-    const result = weightedPick(prizes);
-    const code = (result.id === "LOSE") ? "" : makeCode("WIN");
-
-    markSpun(currentOrderId);
-    spinBtn.disabled = true;
-
-    lotteryResult.textContent = result.label;
-    lotteryCode.textContent = code ? `Code : ${code}` : "";
-
-    // Send result to bot (optional but recommended)
-    const payload = {
-      type: "lottery_result",
-      orderId: currentOrderId,
-      prizeId: result.id,
-      prizeLabel: result.label,
-      code,
-      createdAt: new Date().toISOString()
-    };
-
-    if (tg?.sendData) {
-      tg.sendData(JSON.stringify(payload));
-    } else {
-      console.log(payload);
-    }
-  }
-
-  // Init
-  resetAll();
+function sendSupport(){
+  const txt=document.getElementById("supportText").value;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Service client : "+txt)}`);
+}
 </script>
+
 </body>
 </html>
