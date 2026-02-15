@@ -1,117 +1,239 @@
+<!-- =========================
+     PARTIE 1 / 3
+     ========================= -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>MENU 69 / 71</title>
+  <title>COFFEE ROYALE — MENU 69 / 71</title>
 
   <style>
+    /* ==========================================================
+       COFFEE ROYALE — Resin Texture Luxe Brut (DESIGN)
+       - Rubriques / IDs / logique : conservés
+       - Mot "CBD" : absent
+       ========================================================== */
+
+    :root{
+      --bg0:#050403;
+      --bg1:#0b0806;
+      --glass: rgba(10, 8, 6, 0.64);
+      --stroke: rgba(255,255,255,0.14);
+      --stroke2: rgba(255,255,255,0.08);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.76);
+
+      --resin:#b8895a;
+      --resinDeep:#6e3f24;
+      --ember:#ffcc66;
+      --leaf:#33e06f;
+
+      --radius:18px;
+      --shadow: 0 14px 46px rgba(0,0,0,0.55);
+      --shadowSoft: 0 10px 30px rgba(0,0,0,0.40);
+    }
+
+    *{ box-sizing:border-box; }
+
     body{
       margin:0;
       font-family: Arial, sans-serif;
-      color:#fff;
-      background: url('IMG_7404.jpeg') no-repeat center center fixed;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 780px at 14% -10%, rgba(51,224,111,0.10), transparent 56%),
+        radial-gradient(1000px 740px at 110% 12%, rgba(184,137,90,0.14), transparent 58%),
+        radial-gradient(900px 650px at 40% 120%, rgba(110,63,36,0.14), transparent 58%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 45%, #070605),
+        url('IMG_7404.jpeg') no-repeat center center fixed;
       background-size: cover;
     }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0.16;
+      mix-blend-mode: overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+
     .overlay{
       min-height:100vh;
-      background: rgba(0,0,0,.72);
+      background: rgba(0,0,0,0.68);
       padding: 16px 14px 28px;
-      max-width: 780px;
+      max-width: 820px;
       margin: 0 auto;
     }
-    h1{margin: 10px 0 6px; letter-spacing: 2px; text-align:center}
-    .sub{opacity:.85; font-size:13px; text-align:center; margin-bottom: 10px}
+
+    h1{
+      margin: 10px 0 4px;
+      letter-spacing: 3px;
+      text-align:center;
+      font-weight: 1000;
+      text-transform: uppercase;
+      text-shadow: 0 0 26px rgba(184,137,90,0.15);
+    }
+
+    .brandSub{
+      text-align:center;
+      font-weight: 1000;
+      letter-spacing: 3px;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      opacity: 0.92;
+      color: rgba(255,255,255,0.90);
+    }
+
+    .sub{
+      opacity:.88;
+      font-size:13px;
+      text-align:center;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
     .card{
-      background: rgba(0,0,0,.45);
-      border:1px solid rgba(255,255,255,.15);
-      border-radius: 14px;
+      position:relative;
+      background: var(--glass);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
       padding: 12px;
       margin: 12px 0;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
     }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      left:12px; right:12px; top:10px;
+      height:3px;
+      border-radius:999px;
+      opacity:.62;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(51,224,111,0.70),
+        rgba(184,137,90,0.85),
+        rgba(110,63,36,0.70),
+        transparent
+      );
+      pointer-events:none;
+    }
+
     .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+
     .btn{
       width:100%;
-      background:#1e90ff;
       border:none;
       padding:14px 12px;
       margin: 8px 0;
       font-size:18px;
-      color:#fff;
-      border-radius:12px;
+      color:#080604;
+      border-radius:16px;
       cursor:pointer;
-      font-weight:800;
+      font-weight:1000;
+      background:
+        linear-gradient(135deg, rgba(51,224,111,0.90), rgba(184,137,90,0.92)),
+        radial-gradient(700px 140px at 50% 0%, rgba(255,255,255,0.22), transparent 60%);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.40), 0 0 28px rgba(184,137,90,0.10);
+      transition: transform .08s ease, filter .2s ease;
     }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
     .btn.secondary{
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.2);
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.16);
+      box-shadow:none;
     }
     .btn.ghost{
+      color: var(--text);
       background: transparent;
-      border:1px solid rgba(255,255,255,.2);
+      border:1px solid rgba(255,255,255,0.16);
+      box-shadow:none;
     }
     .btn.small{font-size:14px; padding:10px 12px; width:auto}
+
     .pill{
-      background: rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.16);
       padding: 10px 12px;
-      border-radius: 999px;
+      border-radius:999px;
       cursor:pointer;
-      font-weight:900;
+      font-weight:1000;
       font-size:13px;
       user-select:none;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
     }
-    .pill.active{background: rgba(30,144,255,.95)}
-    .muted{opacity:.82; font-size:13px}
-    .divider{height:1px; background: rgba(255,255,255,.15); margin: 10px 0}
+    .pill:active{ transform: translateY(1px) scale(.99); }
+    .pill.active{
+      background: linear-gradient(135deg, rgba(51,224,111,0.18), rgba(184,137,90,0.14));
+      border-color: rgba(184,137,90,0.35);
+      box-shadow: 0 0 0 2px rgba(184,137,90,0.10), 0 0 28px rgba(184,137,90,0.12);
+    }
+
+    .muted{opacity:.86; font-size:13px; color: var(--muted);}
+    .divider{height:1px; background: rgba(255,255,255,0.12); margin: 10px 0}
+
     .item{
       display:flex; justify-content:space-between; align-items:center;
-      padding: 10px 0; border-bottom:1px solid rgba(255,255,255,.08);
+      padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,0.08);
     }
     .item:last-child{border-bottom:none}
-    .name{font-weight:900}
-    .price{opacity:.9; font-weight:900}
+    .name{font-weight:1000}
+    .price{opacity:.94; font-weight:1000; color: rgba(255,204,102,0.95);}
+
     .qty{display:flex; align-items:center; gap:8px}
     .qbtn{
-      width:34px; height:34px; border-radius:10px;
-      background: rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.2);
-      color:#fff; font-weight:900; font-size:18px;
+      width:36px; height:36px; border-radius:12px;
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.18);
+      color:#fff; font-weight:1000; font-size:18px;
       cursor:pointer;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
     }
-    .qnum{min-width:18px; text-align:center; font-weight:900}
+    .qnum{min-width:18px; text-align:center; font-weight:1000}
+
     textarea, input, select{
       width:100%;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.2);
-      background: rgba(0,0,0,.35);
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.32);
       color:#fff;
-      padding: 12px;
-      font-size: 14px;
+      padding:12px;
+      font-size:14px;
       outline:none;
-      box-sizing: border-box;
-      margin-top: 6px;
+      margin-top:6px;
     }
+    textarea:focus, input:focus, select:focus{
+      border-color: rgba(184,137,90,0.40);
+      box-shadow: 0 0 0 3px rgba(184,137,90,0.12);
+    }
+
     .sumrow{
       display:flex; justify-content:space-between; align-items:center;
       padding:6px 0;
     }
     .sumrow strong{font-size:16px}
     .total strong{font-size:20px}
+
     .hidden{display:none}
     .center{text-align:center}
     .tiny{font-size:12px; opacity:.78}
     .tag{
       display:inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border:1px solid rgba(255,255,255,.2);
-      background: rgba(255,255,255,.10);
-      font-weight:900;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(184,137,90,0.30);
+      background: rgba(184,137,90,0.10);
+      font-weight:1000;
       font-size:12px;
     }
 
-    /* Disabled / bientôt dispo */
     .disabled{
       opacity:.45;
       filter: grayscale(1);
@@ -124,12 +246,11 @@
       padding:4px 8px;
       border-radius:999px;
       font-size:11px;
-      font-weight:900;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.2);
+      font-weight:1000;
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.16);
     }
 
-    /* Roulette */
     .rouletteWrap{
       display:flex;
       flex-direction:column;
@@ -140,23 +261,58 @@
     canvas{
       max-width:100%;
       border-radius:16px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.15);
+      background: rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadowSoft);
     }
     .gainList{
       text-align:left;
       width:100%;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.15);
+      padding:10px 12px;
+      border-radius:12px;
+      background: rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.14);
     }
     .gainList ul{margin:8px 0 0 18px; padding:0}
     .okBox{
       padding:10px 12px;
-      border-radius:12px;
-      background: rgba(123,237,159,.12);
-      border: 1px solid rgba(123,237,159,.35);
+      border-radius:14px;
+      background: rgba(184,137,90,0.10);
+      border:1px solid rgba(184,137,90,0.28);
+      box-shadow: var(--shadowSoft);
+    }
+
+    /* Petit bloc "passage" pour le 69 (affiché dynamiquement) */
+    .plate{
+      width:100%;
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+    .plateTitle{font-weight:1000; margin-bottom:8px}
+    .passageRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:6px 0;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+    .passageRow:last-child{border-bottom:none}
+    .timeTag{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(184,137,90,0.28);
+      background: rgba(184,137,90,0.10);
+      font-weight:1000;
+      font-size:12px;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .btn:focus-visible, .pill:focus-visible, .qbtn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+      outline: 2px solid rgba(184,137,90,0.55);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -164,6 +320,7 @@
 <body>
 <div class="overlay">
   <h1>MENU</h1>
+  <div class="brandSub">COFFEE ROYALE</div>
   <div class="sub">Paiement : main propre • Frais distance : 10€ / 15km (calcul vendeur)</div>
 
   <!-- HOME -->
@@ -200,13 +357,13 @@
 
     <div class="muted center" style="margin-top:10px;">
       Sur place : 07:00 → 00:00<br/>
-      69 livraison : à partir de 15h • 71 livraison : 16h / 19h / 21h30 (+60€ hors tournée)
+      69 livraison : 16h / 19h / 21h30 (+60€ hors tournée) • 71 livraison : 16h / 19h / 21h30 (+60€ hors tournée)
     </div>
 
     <button class="btn ghost" onclick="go('home')">← Accueil</button>
   </div>
 
-  <!-- STEP RUBRIC (69 only) -->
+  <!-- STEP RUBRIC -->
   <div class="card hidden" id="stepRubric">
     <div class="center" style="font-weight:900; margin-bottom:8px;" id="rubricTitle">Choisis la rubrique</div>
     <div class="row">
@@ -222,6 +379,7 @@
   <div class="card hidden" id="stepDeliveryOptions">
     <div class="center" style="font-weight:900; margin-bottom:8px;">Livraison</div>
 
+    <!-- ✅ bloc tournées (sert maintenant pour 69 ET 71) -->
     <div id="delivery71Tours" class="hidden">
       <div class="okBox" style="margin-bottom:10px;">
         <div style="font-weight:900;">🕒 Prochaine tournée : <span id="nextTourLabel">—</span></div>
@@ -229,17 +387,38 @@
       </div>
 
       <div class="muted" style="margin-bottom:8px;">
-        Menu 71 : tournées <b>16:00</b> / <b>19:00</b> / <b>21:30</b><br/>
+        Tournées <b>16:00</b> / <b>19:00</b> / <b>21:30</b><br/>
         Option <b>hors tournée / hors horaires</b> : +60€
       </div>
+
       <div class="row">
         <div class="pill" id="tour16" onclick="selectTour('16:00')">16:00</div>
         <div class="pill" id="tour19" onclick="selectTour('19:00')">19:00</div>
         <div class="pill" id="tour2130" onclick="selectTour('21:30')">21:30</div>
       </div>
+
       <div style="margin-top:10px;">
         <div class="pill" id="premiumPill" onclick="togglePremium()">★ Hors tournée +60€</div>
       </div>
+
+      <!-- ✅ infos passage 69 (affiché uniquement quand secteur=69) -->
+      <div id="delivery69Passage" class="plate hidden" style="margin-top:10px;">
+        <div class="plateTitle">Heures de passage (exemples)</div>
+
+        <div class="passageRow">
+          <div class="muted">Belleville</div>
+          <div class="timeTag">16:00</div>
+        </div>
+        <div class="passageRow">
+          <div class="muted">Villefranche & alentours</div>
+          <div class="timeTag">Toute la journée</div>
+        </div>
+        <div class="passageRow">
+          <div class="muted">Autres communes</div>
+          <div class="timeTag">16:00 / 19:00 / 21:30</div>
+        </div>
+      </div>
+
       <div class="muted" style="margin-top:10px;">
         Si hors tournée, tu peux indiquer une heure souhaitée dans “Note”.
       </div>
@@ -468,7 +647,9 @@
 
 </div>
 
-<script>
+<script><!-- =========================
+     PARTIE 2 / 3
+     ========================= -->
   // =========================
   // CONFIG
   // =========================
@@ -478,6 +659,10 @@
 
   const EURO = (n) => `${n}€`;
 
+  // Secteurs avec tournées + décompte + hors tournée
+  const TOUR_SECTORS = new Set(["69","71"]);
+  const PREMIUM_FEE = 60;
+
   // =========================
   // DATA
   // =========================
@@ -485,7 +670,7 @@
     "69": {
       label: "Menu 69 — Villefranche-sur-Saône",
       pickupHours: "07:00 → 00:00",
-      deliveryInfo: "Livraison à partir de 15h",
+      deliveryInfo: "Tournées : 16h / 19h / 21h30 • Hors tournée +60€",
       pickupCityDefault: "Villefranche-sur-Saône",
       categories: [
         { name: "Jaune mousseux", items: [
@@ -569,13 +754,12 @@
   // =========================
   let sector = null;          // "69" | "71"
   let mode = null;            // "pickup" | "delivery"
-  let pickupCity = null;      // for 71 pickup (Mâcon/Tournus) and 69 pickup
+  let pickupCity = null;
   let activeCat = 0;
   let deliveryTour = null;    // "16:00" | "19:00" | "21:30" | null
-  let premium = false;        // 71 delivery hors tournée +60
+  let premium = false;        // hors tournée +60
   let currentOrderId = null;
 
-  // cart key = `${catIdx}:${itemIdx}` => qty
   const cart = new Map();
 
   // UI refs
@@ -600,6 +784,7 @@
   const premiumPill = document.getElementById("premiumPill");
   const addrEl = document.getElementById("address");
   const noteEl = document.getElementById("note");
+  const delivery69Passage = document.getElementById("delivery69Passage");
 
   // Summary refs
   const sumOrderId = document.getElementById("sumOrderId");
@@ -646,6 +831,7 @@
     rubricInfo.innerHTML =
       `🏢 Sur place : ${DATA[sector].pickupHours}<br/>` +
       `🚘 ${DATA[sector].deliveryInfo}`;
+
     setActivePill(pillPickup, false);
     setActivePill(pillDelivery, false);
   }
@@ -676,6 +862,7 @@
     hideAll();
     stepDeliveryOptions.classList.remove("hidden");
     delivery71Tours.classList.remove("hidden");
+    delivery69Passage.classList.add("hidden");
     selectTour(deliveryTour);
     startTourTicker();
   }
@@ -688,16 +875,23 @@
     if(mode === "delivery"){
       hideAll();
       stepDeliveryOptions.classList.remove("hidden");
-      delivery71Tours.classList.toggle("hidden", sector !== "71");
-      if(sector !== "71"){
-        deliveryTour = null; premium = false;
-      } else {
+
+      const showTours = TOUR_SECTORS.has(sector);
+      delivery71Tours.classList.toggle("hidden", !showTours);
+
+      // Affiche le mini bloc "passage" uniquement en 69
+      if(showTours){
+        delivery69Passage.classList.toggle("hidden", sector !== "69");
+      }
+
+      if(showTours){
         deliveryTour = deliveryTour || "16:00";
         selectTour(deliveryTour);
         startTourTicker();
+      } else {
+        deliveryTour = null; premium = false;
       }
     } else {
-      // pickup
       pickupCity = (sector === "69") ? DATA["69"].pickupCityDefault : (pickupCity || "Mâcon");
       goToMenu();
     }
@@ -709,7 +903,7 @@
   }
 
   function selectTour(t){
-    if(sector !== "71") return;
+    if(!TOUR_SECTORS.has(sector)) return;
     deliveryTour = t;
     clearToursUI();
     if(t === "16:00") document.getElementById("tour16").classList.add("active");
@@ -719,7 +913,7 @@
   }
 
   function togglePremium(){
-    if(sector !== "71" || mode !== "delivery") return;
+    if(!TOUR_SECTORS.has(sector) || mode !== "delivery") return;
     premium = !premium;
     premiumPill.classList.toggle("active", premium);
   }
@@ -736,7 +930,7 @@
         alert("Adresse obligatoire pour la livraison.");
         return;
       }
-      if(sector === "71" && !deliveryTour && !premium){
+      if(TOUR_SECTORS.has(sector) && !deliveryTour && !premium){
         alert("Choisis une tournée (ou hors tournée).");
         return;
       }
@@ -750,777 +944,10 @@
   function backFromMenu(){
     if(mode === "delivery"){
       hideAll(); stepDeliveryOptions.classList.remove("hidden");
-      if(sector === "71") startTourTicker();
+      if(TOUR_SECTORS.has(sector)) startTourTicker();
     } else if(sector === "69"){
       hideAll(); stepRubric.classList.remove("hidden");
     } else {
       hideAll(); document.getElementById("stepSector").classList.remove("hidden");
     }
   }
-
-  function clearCart(){
-    cart.clear();
-    renderMenu();
-  }
-
-  function renderMenu(){
-    const sec = DATA[sector];
-    let subtitle = (mode === "pickup") ? "Sur place" : "Livraison";
-    if(mode === "pickup" && pickupCity) subtitle += ` — ${pickupCity}`;
-    menuTitle.textContent = `${sec.label} — ${subtitle}`;
-
-    const premFee = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    premiumRow.classList.toggle("hidden", premFee === 0);
-
-    categoryRow.innerHTML = "";
-    sec.categories.forEach((c, idx) => {
-      const p = document.createElement("div");
-      p.className = "pill" + (idx === activeCat ? " active" : "");
-      p.textContent = c.name;
-      p.onclick = () => { activeCat = idx; renderMenu(); };
-      categoryRow.appendChild(p);
-    });
-
-    itemsList.innerHTML = "";
-    const cat = sec.categories[activeCat];
-
-    cat.items.forEach((it, itemIdx) => {
-      const key = `${activeCat}:${itemIdx}`;
-      const qty = cart.get(key) || 0;
-      const price = (mode === "pickup") ? it.pickup : it.delivery;
-
-      const row = document.createElement("div");
-      row.className = "item";
-
-      const left = document.createElement("div");
-      left.innerHTML = `<div class="name">${it.name}</div><div class="price">${EURO(price)}</div>`;
-
-      const right = document.createElement("div");
-      right.className = "qty";
-
-      const minus = document.createElement("button");
-      minus.className = "qbtn";
-      minus.textContent = "−";
-      minus.onclick = () => {
-        const q = cart.get(key) || 0;
-        if(q <= 0) return;
-        if(q === 1) cart.delete(key);
-        else cart.set(key, q - 1);
-        renderMenu();
-      };
-
-      const num = document.createElement("div");
-      num.className = "qnum";
-      num.textContent = qty;
-
-      const plus = document.createElement("button");
-      plus.className = "qbtn";
-      plus.textContent = "+";
-      plus.onclick = () => {
-        const q = cart.get(key) || 0;
-        cart.set(key, q + 1);
-        renderMenu();
-      };
-
-      right.appendChild(minus);
-      right.appendChild(num);
-      right.appendChild(plus);
-
-      row.appendChild(left);
-      row.appendChild(right);
-      itemsList.appendChild(row);
-    });
-
-    const sub = computeSubtotal();
-    const prem = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    subtotalEl.textContent = EURO(sub);
-    totalEl.textContent = EURO(sub + prem);
-  }
-
-  function computeSubtotal(){
-    const sec = DATA[sector];
-    let sum = 0;
-    for(const [key, qty] of cart.entries()){
-      const [cIdx, iIdx] = key.split(":").map(Number);
-      const item = sec.categories[cIdx].items[iIdx];
-      const price = (mode === "pickup") ? item.pickup : item.delivery;
-      sum += price * qty;
-    }
-    return sum;
-  }
-
-  function buildOrderPayload(){
-    const sec = DATA[sector];
-    const sub = computeSubtotal();
-    const premFee = (sector === "71" && mode === "delivery" && premium) ? 60 : 0;
-    const total = sub + premFee;
-
-    const items = [];
-    for(const [key, qty] of cart.entries()){
-      const [cIdx, iIdx] = key.split(":").map(Number);
-      const cat = sec.categories[cIdx];
-      const item = cat.items[iIdx];
-      const unit = (mode === "pickup") ? item.pickup : item.delivery;
-      items.push({ cat: cat.name, name: item.name, qty, unit, line: unit * qty });
-    }
-
-    const refCode = (document.getElementById("referrerCode").value || "").trim();
-
-    return {
-      orderId: currentOrderId,
-      sector,
-      sectorLabel: sec.label,
-      mode,
-      pickupCity: (mode === "pickup") ? (pickupCity || "") : "",
-      delivery: {
-        tour: (sector === "71" && mode === "delivery") ? (premium ? null : (deliveryTour || null)) : null,
-        premium: (sector === "71" && mode === "delivery") ? premium : false,
-        premiumFee: premFee,
-        address: (mode === "delivery") ? (addrEl.value || "").trim() : "",
-        note: (mode === "delivery") ? (noteEl.value || "").trim() : ""
-      },
-      referral: { referrerCode: refCode || "" },
-      pricing: {
-        currency: "EUR",
-        subtotal: sub,
-        premiumFee: premFee,
-        totalWithoutDistance: total,
-        distanceRule: "10€/15km (calcul vendeur)",
-        extraRule: "La direction peut ajouter des frais selon km"
-      },
-      payment: "main_propre",
-      items,
-      createdAt: new Date().toISOString()
-    };
-  }
-
-  function goToSummary(){
-    const sub = computeSubtotal();
-    if(sub <= 0){ alert("Ajoute au moins un produit."); return; }
-
-    if(mode === "delivery" && !((addrEl.value || "").trim())){
-      alert("Adresse obligatoire pour la livraison.");
-      return;
-    }
-
-    currentOrderId = generateOrderId(sector);
-    const payload = buildOrderPayload();
-
-    sumOrderId.textContent = payload.orderId;
-    sumSector.textContent = payload.sectorLabel;
-    sumMode.textContent = (payload.mode === "pickup") ? "Sur place" : "Livraison";
-
-    // pickup city row
-    if(payload.mode === "pickup" && payload.pickupCity){
-      sumPickupCityRow.style.display = "flex";
-      sumPickupCity.textContent = payload.pickupCity;
-    } else {
-      sumPickupCityRow.style.display = "none";
-      sumPickupCity.textContent = "—";
-    }
-
-    // items
-    sumItems.innerHTML = "";
-    payload.items.forEach(it => {
-      const div = document.createElement("div");
-      div.className = "sumrow";
-      div.innerHTML = `<span class="muted">${it.name} x${it.qty}</span><strong>${EURO(it.line)}</strong>`;
-      sumItems.appendChild(div);
-    });
-
-    // totals
-    sumSubtotal.textContent = EURO(payload.pricing.subtotal);
-    sumPremiumFeeRow.style.display = (payload.pricing.premiumFee > 0) ? "flex" : "none";
-    sumPremiumFee.textContent = EURO(payload.pricing.premiumFee);
-    sumTotal.textContent = EURO(payload.pricing.totalWithoutDistance);
-
-    // delivery block
-    if(payload.mode === "delivery"){
-      sumDeliveryBlock.classList.remove("hidden");
-      sumAddress.textContent = payload.delivery.address || "—";
-      sumNote.textContent = payload.delivery.note || "—";
-
-      const showTour = (payload.sector === "71" && !payload.delivery.premium);
-      sumTourRow.style.display = showTour ? "flex" : "none";
-      sumTour.textContent = showTour ? (payload.delivery.tour || "—") : "—";
-      sumPremiumRow.style.display = (payload.sector === "71" && payload.delivery.premium) ? "flex" : "none";
-    } else {
-      sumDeliveryBlock.classList.add("hidden");
-    }
-
-    localStorage.setItem("lastOrderPayload", JSON.stringify(payload));
-
-    hideAll();
-    stepSummary.classList.remove("hidden");
-  }
-
-  function buildWhatsAppMessage(payload){
-    const lines = [];
-    lines.push("✅ COMMANDE OFFICIELLE");
-    lines.push("");
-    lines.push(`ID : ${payload.orderId}`);
-    lines.push(`Secteur : ${payload.sectorLabel}`);
-    lines.push(`Mode : ${payload.mode === "pickup" ? "Sur place" : "Livraison"}`);
-    if(payload.mode === "pickup" && payload.pickupCity){
-      lines.push(`Ville : ${payload.pickupCity}`);
-    }
-    lines.push("");
-
-    if(payload.mode === "delivery"){
-      if(payload.sector === "71"){
-        if(payload.delivery.premium){
-          lines.push("★ Hors tournée : OUI (+60€)");
-        } else {
-          lines.push(`Tournée : ${payload.delivery.tour || "—"}`);
-        }
-      }
-      lines.push("");
-      lines.push("Adresse :");
-      lines.push(payload.delivery.address || "—");
-      if(payload.delivery.note){
-        lines.push("");
-        lines.push(`Note : ${payload.delivery.note}`);
-      }
-      lines.push("");
-    }
-
-    lines.push("Produits :");
-    payload.items.forEach(it => lines.push(`- ${it.name} x${it.qty} = ${it.line}€`));
-
-    lines.push("");
-    lines.push(`Sous-total : ${payload.pricing.subtotal}€`);
-    if(payload.pricing.premiumFee > 0) lines.push(`Hors tournée : +${payload.pricing.premiumFee}€`);
-    lines.push(`TOTAL (hors distance) : ${payload.pricing.totalWithoutDistance}€`);
-    lines.push(`Frais distance : ${payload.pricing.distanceRule}`);
-    lines.push("");
-
-    // partenaire
-    if(payload.referral?.referrerCode){
-      lines.push(`Code partenaire : ${payload.referral.referrerCode}`);
-    } else {
-      lines.push("Code partenaire : (si tu en as un, écris-le ici)");
-    }
-
-    lines.push("");
-    lines.push("Paiement : main propre");
-    lines.push("");
-    lines.push("🎰 ROUE : gain valable uniquement après validation réelle du livreur.");
-    lines.push("Sans validation, aucun gain ne sera pris en compte.");
-
-    return lines.join("\n");
-  }
-
-  function confirmToWhatsApp(){
-    const raw = localStorage.getItem("lastOrderPayload");
-    if(!raw){ alert("Aucune commande trouvée."); return; }
-    const payload = JSON.parse(raw);
-
-    localStorage.setItem("lastOrderId", payload.orderId);
-    localStorage.setItem("lastOrderTs", String(Date.now()));
-
-    const msg = buildWhatsAppMessage(payload);
-    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-  }
-
-  // =========================
-  // TOUR COUNTDOWN (71)
-  // =========================
-  let tourTicker = null;
-
-  function parseTodayTime(hhmm){
-    const [hh, mm] = hhmm.split(":").map(Number);
-    const d = new Date();
-    d.setHours(hh, mm, 0, 0);
-    return d;
-  }
-
-  function getNextTourInfo(){
-    const tours = ["16:00","19:00","21:30"];
-    const now = new Date();
-
-    for(const t of tours){
-      const dt = parseTodayTime(t);
-      if(dt.getTime() > now.getTime()){
-        return { label: t, time: dt };
-      }
-    }
-    // tomorrow 16:00
-    const tomorrow = new Date(now.getTime() + 24*60*60*1000);
-    tomorrow.setHours(16,0,0,0);
-    return { label: "demain 16:00", time: tomorrow };
-  }
-
-  function fmtCountdown(ms){
-    const s = Math.max(0, Math.floor(ms/1000));
-    const h = Math.floor(s/3600);
-    const m = Math.floor((s%3600)/60);
-    const ss = s%60;
-    const pad = (x)=>String(x).padStart(2,"0");
-    if(h > 0) return `${pad(h)}h${pad(m)}m`;
-    return `${pad(m)}m${pad(ss)}s`;
-  }
-
-  function startTourTicker(){
-    const labelEl = document.getElementById("nextTourLabel");
-    const cdEl = document.getElementById("nextTourCountdown");
-    if(tourTicker) clearInterval(tourTicker);
-
-    const tick = ()=>{
-      const info = getNextTourInfo();
-      labelEl.textContent = info.label;
-      cdEl.textContent = fmtCountdown(info.time.getTime() - Date.now());
-    };
-    tick();
-    tourTicker = setInterval(tick, 1000);
-  }
-
-  // =========================
-  // WHEEL: validation + weekly limit + roulette animation
-  // =========================
-  function canSpinThisWeek(){
-    const last = Number(localStorage.getItem("wheel:lastSpinTs") || "0");
-    if(!last) return true;
-    return (Date.now() - last) >= 7*24*60*60*1000;
-  }
-  function nextEligibleText(){
-    const last = Number(localStorage.getItem("wheel:lastSpinTs") || "0");
-    if(!last) return "Maintenant";
-    const remain = 7*24*60*60*1000 - (Date.now() - last);
-    if(remain <= 0) return "Maintenant";
-    const days = Math.ceil(remain / (24*60*60*1000));
-    return `${days} jour(s)`;
-  }
-  function makeWinCode(prefix="WIN"){
-    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-    let s = "";
-    for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
-    return `${prefix}-${s}`;
-  }
-
-  const PRIZES = [
-    { id:"WIN_100_FILTER", label:"🎁 100 meuje filtre", p:0.05 },
-    { id:"WIN_90_OFF",     label:"🎁 -90% sur tout le catalogue", p:0.05 },
-    { id:"WIN_FREE_DEL",   label:"🎁 Livraison gratuite", p:10.0 },
-    { id:"WIN_STARTER",    label:"🎁 Starter pack", p:25.0 },
-    { id:"LOSE",           label:"😅 Merci pour votre participation", p:64.9 }
-  ];
-
-  // Roulette visual segments (order matters)
-  const SEGMENTS = [
-    { id:"LOSE", label:"PERDU" },
-    { id:"WIN_STARTER", label:"STARTER" },
-    { id:"LOSE", label:"PERDU" },
-    { id:"WIN_FREE_DEL", label:"LIVRAISON" },
-    { id:"LOSE", label:"PERDU" },
-    { id:"WIN_90_OFF", label:"-90%" },
-    { id:"LOSE", label:"PERDU" },
-    { id:"WIN_100_FILTER", label:"100" }
-  ];
-
-  let wheelVerified = false;
-  let rouletteRunning = false;
-
-  const validateBtn = document.getElementById("validateBtn");
-  const verifiedBox = document.getElementById("verifiedBox");
-  const wheelNextInfo = document.getElementById("wheelNextInfo");
-  const rouletteWrap = document.getElementById("rouletteWrap");
-  const wheelMsg = document.getElementById("wheelMsg");
-  const wheelWinCode = document.getElementById("wheelWinCode");
-  const spinBtn = document.getElementById("spinBtn");
-
-  function resetWheelUI(){
-    wheelVerified = false;
-    rouletteRunning = false;
-    verifiedBox.classList.add("hidden");
-    rouletteWrap.classList.add("hidden");
-    wheelMsg.textContent = "";
-    wheelWinCode.textContent = "";
-    document.getElementById("wheelCode").value = "";
-    validateBtn.disabled = false;
-    spinBtn.disabled = false;
-    wheelNextInfo.textContent = nextEligibleText();
-    drawRoulette(0, 0);
-  }
-
-  function validateWheelCode(){
-    wheelMsg.textContent = "";
-    wheelWinCode.textContent = "";
-
-    if(!canSpinThisWeek()){
-      wheelMsg.textContent = "⛔ Déjà joué cette semaine.";
-      wheelNextInfo.textContent = nextEligibleText();
-      return;
-    }
-
-    const code = (document.getElementById("wheelCode").value || "").trim();
-    if(code !== VALIDATION_CODE){
-      wheelMsg.textContent = "❌ Code invalide. Attends la validation du livreur.";
-      return;
-    }
-
-    wheelVerified = true;
-    validateBtn.disabled = true;
-    verifiedBox.classList.remove("hidden");
-    rouletteWrap.classList.remove("hidden");
-    wheelNextInfo.textContent = "Après ce tour : 7 jours";
-    drawRoulette(0, 0);
-  }
-
-  function weightedPick(prizes){
-    const total = prizes.reduce((s,x)=>s+x.p,0);
-    let r = Math.random()*total;
-    for(const x of prizes){
-      r -= x.p;
-      if(r <= 0) return x;
-    }
-    return prizes[prizes.length-1];
-  }
-
-  function pickTargetSegment(prizeId){
-    const candidates = [];
-    for(let i=0;i<SEGMENTS.length;i++){
-      if(SEGMENTS[i].id === prizeId) candidates.push(i);
-    }
-    if(candidates.length === 0){
-      for(let i=0;i<SEGMENTS.length;i++){
-        if(SEGMENTS[i].id === "LOSE") candidates.push(i);
-      }
-    }
-    return candidates[Math.floor(Math.random()*candidates.length)];
-  }
-
-  // Canvas roulette drawing & animation
-  const canvas = document.getElementById("rouletteCanvas");
-  const ctx = canvas.getContext("2d");
-
-  function drawRoulette(wheelAngle, ballAngle){
-    const w = canvas.width, h = canvas.height;
-    const cx = w/2, cy = h/2;
-    const R = Math.min(w,h)/2 - 18;
-    const ringR = R;
-    const innerR = R * 0.62;
-
-    ctx.clearRect(0,0,w,h);
-
-    // table background
-    ctx.beginPath();
-    ctx.arc(cx, cy, ringR+10, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(0,0,0,0.25)";
-    ctx.fill();
-
-    // Wheel segments
-    const n = SEGMENTS.length;
-    const seg = (Math.PI*2)/n;
-
-    for(let i=0;i<n;i++){
-      const a0 = wheelAngle + i*seg;
-      const a1 = a0 + seg;
-
-      ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,ringR,a0,a1);
-      ctx.closePath();
-
-      // alternating colors (roulette vibe)
-      const isRed = i%2===0;
-      ctx.fillStyle = isRed ? "rgba(220,20,60,0.9)" : "rgba(20,160,80,0.9)";
-      ctx.fill();
-
-      // separators
-      ctx.strokeStyle = "rgba(255,255,255,0.15)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // labels
-      ctx.save();
-      ctx.translate(cx,cy);
-      const mid = a0 + seg/2;
-      ctx.rotate(mid);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "rgba(255,255,255,0.95)";
-      ctx.font = "bold 18px Arial";
-      ctx.fillText(SEGMENTS[i].label, ringR - 14, 6);
-      ctx.restore();
-    }
-
-    // inner circle
-    ctx.beginPath();
-    ctx.arc(cx,cy,innerR,0,Math.PI*2);
-    ctx.fillStyle = "rgba(0,0,0,0.45)";
-    ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.12)";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // pointer (top)
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - ringR - 6);
-    ctx.lineTo(cx - 14, cy - ringR + 18);
-    ctx.lineTo(cx + 14, cy - ringR + 18);
-    ctx.closePath();
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
-    ctx.fill();
-
-    // ball track
-    const ballR = 7;
-    const trackR = ringR - 12;
-
-    // ball position (orbit, opposite direction looks realistic)
-    const bx = cx + trackR * Math.cos(ballAngle);
-    const by = cy + trackR * Math.sin(ballAngle);
-
-    // ball shadow
-    ctx.beginPath();
-    ctx.arc(bx+2, by+2, ballR, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(0,0,0,0.35)";
-    ctx.fill();
-
-    // ball
-    ctx.beginPath();
-    ctx.arc(bx, by, ballR, 0, Math.PI*2);
-    ctx.fillStyle = "rgba(255,255,255,0.95)";
-    ctx.fill();
-    ctx.strokeStyle = "rgba(0,0,0,0.25)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  }
-
-  function spinRoulette(){
-    if(!wheelVerified){
-      wheelMsg.textContent = "Valide d'abord la commande.";
-      return;
-    }
-    if(!canSpinThisWeek()){
-      wheelMsg.textContent = "⛔ Déjà joué cette semaine.";
-      return;
-    }
-    if(rouletteRunning) return;
-
-    rouletteRunning = true;
-    spinBtn.disabled = true;
-    wheelMsg.textContent = "";
-    wheelWinCode.textContent = "";
-
-    // pick prize by weights (hidden)
-    const prize = weightedPick(PRIZES);
-    const targetIdx = pickTargetSegment(prize.id);
-
-    const n = SEGMENTS.length;
-    const seg = (Math.PI*2)/n;
-
-    // We want the pointer at top (angle = -PI/2) to land in target segment
-    // Segment i occupies [wheelAngle + i*seg, wheelAngle + (i+1)*seg)
-    // Condition: pointerAngle (-PI/2) lies within that interval.
-    const pointerAngle = -Math.PI/2;
-
-    // Choose final wheelAngle so that pointer lands in target segment center
-    const targetCenter = (targetIdx + 0.5) * seg;
-    // wheelAngle + targetCenter == pointerAngle  (mod 2pi)
-    let finalWheelAngle = pointerAngle - targetCenter;
-
-    // Add multiple full rotations for drama
-    const spins = 10 + Math.floor(Math.random()*6); // 10..15
-    finalWheelAngle -= spins * Math.PI*2;
-
-    // Ball starts fast opposite direction and slows too
-    let wheelAngle = 0;
-    let ballAngle = Math.PI/2;
-
-    const start = performance.now();
-    const dur = 4200; // ms
-
-    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-
-    const startWheel = wheelAngle;
-    const deltaWheel = finalWheelAngle - startWheel;
-
-    const startBall = ballAngle;
-    const deltaBall = (Math.PI*2) * (18 + Math.random()*6); // ball makes many laps
-
-    function frame(now){
-      const t = Math.min(1, (now - start)/dur);
-      const e = easeOutCubic(t);
-
-      wheelAngle = startWheel + deltaWheel * e;
-      // ball slows with different easing
-      const eb = 1 - Math.pow(1 - t, 2.2);
-      ballAngle = startBall + (-deltaBall) * eb;
-
-      drawRoulette(wheelAngle, ballAngle);
-
-      if(t < 1){
-        requestAnimationFrame(frame);
-      } else {
-        // finalize
-        localStorage.setItem("wheel:lastSpinTs", String(Date.now()));
-        const winCode = (prize.id === "LOSE") ? "" : makeWinCode("WIN");
-        localStorage.setItem("wheel:lastPrize", prize.id);
-        localStorage.setItem("wheel:lastWinCode", winCode);
-
-        wheelMsg.textContent = prize.label + " ✅";
-        wheelWinCode.textContent = winCode ? `Code : ${winCode} (à vérifier à la remise)` : "";
-
-        rouletteRunning = false;
-        wheelVerified = false; // requires re-validate next week
-        validateBtn.disabled = false;
-        verifiedBox.classList.add("hidden");
-        rouletteWrap.classList.add("hidden");
-        wheelNextInfo.textContent = nextEligibleText();
-      }
-    }
-
-    requestAnimationFrame(frame);
-  }
-
-  // =========================
-  // REFERRAL
-  // =========================
-  function ensureMyRefCode(){
-    let code = localStorage.getItem("ref:myCode");
-    if(!code){
-      const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
-      let s="";
-      for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
-      code = `REF-${s}`;
-      localStorage.setItem("ref:myCode", code);
-    }
-    return code;
-  }
-  function getRefCount(){ return Number(localStorage.getItem("ref:count") || "0"); }
-  function setRefCount(n){ localStorage.setItem("ref:count", String(n)); }
-
-  function renderReferral(){
-    document.getElementById("myRefCode").textContent = ensureMyRefCode();
-    const c = getRefCount();
-    document.getElementById("refCount").textContent = String(c);
-
-    let status = "";
-    if(c >= 10) status = "✅ Palier atteint : -100€";
-    else if(c >= 5) status = "✅ Palier atteint : -30€ (prochain : 10 → -100€)";
-    else if(c >= 3) status = "✅ Palier atteint : -20€ (prochain : 5 → -30€)";
-    else status = `Encore ${3-c} filleul(s) pour débloquer -20€`;
-    document.getElementById("refStatus").textContent = status;
-  }
-
-  function shareReferral(){
-    const code = ensureMyRefCode();
-    const link = window.location.href;
-    const text =
-`🔥 Nouveau concept
-Viens voir le menu : ${link}
-
-Code partenaire : ${code}
-(à mettre dans la commande)`;
-    window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
-  }
-
-  function sellerAddReferral(){
-    const pin = (document.getElementById("sellerPin").value || "").trim();
-    if(pin !== SELLER_PIN){
-      alert("PIN vendeur incorrect.");
-      return;
-    }
-    const c = getRefCount() + 1;
-    setRefCount(c);
-    document.getElementById("sellerPin").value = "";
-    renderReferral();
-    alert("✅ 1 filleul validé ajouté.");
-  }
-
-  // =========================
-  // CONTEST
-  // =========================
-  function sendContest(){
-    const link = (document.getElementById("contestLink").value || "").trim();
-    const platform = document.getElementById("contestPlatform").value;
-    const user = (document.getElementById("contestUser").value || "").trim();
-
-    if(!link){ alert("Mets le lien de ta vidéo."); return; }
-
-    const msg =
-`🏆 CONCOURS CRÉATEUR
-
-Plateforme : ${platform}
-Pseudo : ${user || "—"}
-Lien : ${link}`;
-
-    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-  }
-
-  // =========================
-  // APPLY
-  // =========================
-  let applyKind = "shop";
-  function applyType(kind){
-    applyKind = kind;
-    document.getElementById("applyShopPill").classList.toggle("active", kind === "shop");
-    document.getElementById("applyDeliveryPill").classList.toggle("active", kind === "delivery");
-  }
-  function sendApply(){
-    const name = (document.getElementById("applyName").value || "").trim();
-    const city = (document.getElementById("applyCity").value || "").trim();
-    const avail = (document.getElementById("applyAvail").value || "").trim();
-    const msg = (document.getElementById("applyMsg").value || "").trim();
-
-    if(!name || !city || !msg){
-      alert("Remplis au minimum : Nom, Ville, Message.");
-      return;
-    }
-
-    const title = (applyKind === "shop") ? "🏪 CANDIDATURE OUVRIR SECTEUR" : "🚚 CANDIDATURE LIVREUR";
-    const text =
-`${title}
-
-Nom : ${name}
-Ville/Dépt : ${city}
-Dispos : ${avail || "—"}
-
-Message :
-${msg}`;
-
-    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-  }
-
-  // =========================
-  // SUPPORT
-  // =========================
-  function sendSupport(){
-    const type = document.getElementById("supportType").value;
-    const oid = (document.getElementById("supportOrderId").value || "").trim();
-    const msg = (document.getElementById("supportMsg").value || "").trim();
-
-    if(!msg){ alert("Écris ton message."); return; }
-
-    const text =
-`📩 SERVICE CLIENT
-
-Type : ${type}
-ID commande : ${oid || "—"}
-
-Message :
-${msg}`;
-
-    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-  }
-
-  // =========================
-  // SHARE SITE
-  // =========================
-  function shareSite(){
-    const link = window.location.href;
-    const code = ensureMyRefCode();
-    const text =
-`Découvre le menu :
-${link}
-
-Code partenaire : ${code}`;
-    window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
-  }
-
-  // Init
-  go("home");
-  drawRoulette(0, Math.PI/2);
-</script>
-
-</body>
-</html>
