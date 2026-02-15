@@ -951,3 +951,743 @@
       hideAll(); document.getElementById("stepSector").classList.remove("hidden");
     }
   }
+<!-- =========================
+     PARTIE 3 / 3
+     ========================= -->
+  function clearCart(){
+    cart.clear();
+    renderMenu();
+  }
+
+  function renderMenu(){
+    const sec = DATA[sector];
+    let subtitle = (mode === "pickup") ? "Sur place" : "Livraison";
+    if(mode === "pickup" && pickupCity) subtitle += ` — ${pickupCity}`;
+    menuTitle.textContent = `${sec.label} — ${subtitle}`;
+
+    const premFee = (TOUR_SECTORS.has(sector) && mode === "delivery" && premium) ? PREMIUM_FEE : 0;
+    premiumRow.classList.toggle("hidden", premFee === 0);
+
+    categoryRow.innerHTML = "";
+    sec.categories.forEach((c, idx) => {
+      const p = document.createElement("div");
+      p.className = "pill" + (idx === activeCat ? " active" : "");
+      p.textContent = c.name;
+      p.onclick = () => { activeCat = idx; renderMenu(); };
+      categoryRow.appendChild(p);
+    });
+
+    itemsList.innerHTML = "";
+    const cat = sec.categories[activeCat];
+
+    cat.items.forEach((it, itemIdx) => {
+      const key = `${activeCat}:${itemIdx}`;
+      const qty = cart.get(key) || 0;
+      const price = (mode === "pickup") ? it.pickup : it.delivery;
+
+      const row = document.createElement("div");
+      row.className = "item";
+
+      const left = document.createElement("div");
+      left.innerHTML = `<div class="name">${it.name}</div><div class="price">${EURO(price)}</div>`;
+
+      const right = document.createElement("div");
+      right.className = "qty";
+
+      const minus = document.createElement("button");
+      minus.className = "qbtn";
+      minus.textContent = "−";
+      minus.onclick = () => {
+        const q = cart.get(key) || 0;
+        if(q <= 0) return;
+        if(q === 1) cart.delete(key);
+        else cart.set(key, q - 1);
+        renderMenu();
+      };
+
+      const num = document.createElement("div");
+      num.className = "qnum";
+      num.textContent = qty;
+
+      const plus = document.createElement("button");
+      plus.className = "qbtn";
+      plus.textContent = "+";
+      plus.onclick = () => {
+        const q = cart.get(key) || 0;
+        cart.set(key, q + 1);
+        renderMenu();
+      };
+
+      right.appendChild(minus);
+      right.appendChild(num);
+      right.appendChild(plus);
+
+      row.appendChild(left);
+      row.appendChild(right);
+      itemsList.appendChild(row);
+    });
+
+    const sub = computeSubtotal();
+    const prem = (TOUR_SECTORS.has(sector) && mode === "delivery" && premium) ? PREMIUM_FEE : 0;
+    subtotalEl.textContent = EURO(sub);
+    totalEl.textContent = EURO(sub + prem);
+  }
+
+  function computeSubtotal(){
+    const sec = DATA[sector];
+    let sum = 0;
+    for(const [key, qty] of cart.entries()){
+      const [cIdx, iIdx] = key.split(":").map(Number);
+      const item = sec.categories[cIdx].items[iIdx];
+      const price = (mode === "pickup") ? item.pickup : item.delivery;
+      sum += price * qty;
+    }
+    return sum;
+  }
+
+  function buildOrderPayload(){
+    const sec = DATA[sector];
+    const sub = computeSubtotal();
+    const premFee = (TOUR_SECTORS.has(sector) && mode === "delivery" && premium) ? PREMIUM_FEE : 0;
+    const total = sub + premFee;
+
+    const items = [];
+    for(const [key, qty] of cart.entries()){
+      const [cIdx, iIdx] = key.split(":").map(Number);
+      const cat = sec.categories[cIdx];
+      const item = cat.items[iIdx];
+      const unit = (mode === "pickup") ? item.pickup : item.delivery;
+      items.push({ cat: cat.name, name: item.name, qty, unit, line: unit * qty });
+    }
+
+    const refCode = (document.getElementById("referrerCode").value || "").trim();
+
+    return {
+      orderId: currentOrderId,
+      sector,
+      sectorLabel: sec.label,
+      mode,
+      pickupCity: (mode === "pickup") ? (pickupCity || "") : "",
+      delivery: {
+        tour: (TOUR_SECTORS.has(sector) && mode === "delivery") ? (premium ? null : (deliveryTour || null)) : null,
+        premium: (TOUR_SECTORS.has(sector) && mode === "delivery") ? premium : false,
+        premiumFee: premFee,
+        address: (mode === "delivery") ? (addrEl.value || "").trim() : "",
+        note: (mode === "delivery") ? (noteEl.value || "").trim() : ""
+      },
+      referral: { referrerCode: refCode || "" },
+      pricing: {
+        currency: "EUR",
+        subtotal: sub,
+        premiumFee: premFee,
+        totalWithoutDistance: total,
+        distanceRule: "10€/15km (calcul vendeur)",
+        extraRule: "La direction peut ajouter des frais selon km"
+      },
+      payment: "main_propre",
+      items,
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  function goToSummary(){
+    const sub = computeSubtotal();
+    if(sub <= 0){ alert("Ajoute au moins un produit."); return; }
+
+    if(mode === "delivery" && !((addrEl.value || "").trim())){
+      alert("Adresse obligatoire pour la livraison.");
+      return;
+    }
+
+    currentOrderId = generateOrderId(sector);
+    const payload = buildOrderPayload();
+
+    sumOrderId.textContent = payload.orderId;
+    sumSector.textContent = payload.sectorLabel;
+    sumMode.textContent = (payload.mode === "pickup") ? "Sur place" : "Livraison";
+
+    if(payload.mode === "pickup" && payload.pickupCity){
+      sumPickupCityRow.style.display = "flex";
+      sumPickupCity.textContent = payload.pickupCity;
+    } else {
+      sumPickupCityRow.style.display = "none";
+      sumPickupCity.textContent = "—";
+    }
+
+    sumItems.innerHTML = "";
+    payload.items.forEach(it => {
+      const div = document.createElement("div");
+      div.className = "sumrow";
+      div.innerHTML = `<span class="muted">${it.name} x${it.qty}</span><strong>${EURO(it.line)}</strong>`;
+      sumItems.appendChild(div);
+    });
+
+    sumSubtotal.textContent = EURO(payload.pricing.subtotal);
+    sumPremiumFeeRow.style.display = (payload.pricing.premiumFee > 0) ? "flex" : "none";
+    sumPremiumFee.textContent = EURO(payload.pricing.premiumFee);
+    sumTotal.textContent = EURO(payload.pricing.totalWithoutDistance);
+
+    if(payload.mode === "delivery"){
+      sumDeliveryBlock.classList.remove("hidden");
+      sumAddress.textContent = payload.delivery.address || "—";
+      sumNote.textContent = payload.delivery.note || "—";
+
+      const showTour = (TOUR_SECTORS.has(payload.sector) && !payload.delivery.premium);
+      sumTourRow.style.display = showTour ? "flex" : "none";
+      sumTour.textContent = showTour ? (payload.delivery.tour || "—") : "—";
+      sumPremiumRow.style.display = (TOUR_SECTORS.has(payload.sector) && payload.delivery.premium) ? "flex" : "none";
+    } else {
+      sumDeliveryBlock.classList.add("hidden");
+    }
+
+    localStorage.setItem("lastOrderPayload", JSON.stringify(payload));
+
+    hideAll();
+    stepSummary.classList.remove("hidden");
+  }
+
+  function buildWhatsAppMessage(payload){
+    const lines = [];
+    lines.push("✅ COMMANDE OFFICIELLE");
+    lines.push("");
+    lines.push(`ID : ${payload.orderId}`);
+    lines.push(`Secteur : ${payload.sectorLabel}`);
+    lines.push(`Mode : ${payload.mode === "pickup" ? "Sur place" : "Livraison"}`);
+    if(payload.mode === "pickup" && payload.pickupCity){
+      lines.push(`Ville : ${payload.pickupCity}`);
+    }
+    lines.push("");
+
+    if(payload.mode === "delivery"){
+      if(TOUR_SECTORS.has(payload.sector)){
+        if(payload.delivery.premium){
+          lines.push(`★ Hors tournée : OUI (+${PREMIUM_FEE}€)`);
+        } else {
+          lines.push(`Tournée : ${payload.delivery.tour || "—"}`);
+        }
+      }
+      lines.push("");
+      lines.push("Adresse :");
+      lines.push(payload.delivery.address || "—");
+      if(payload.delivery.note){
+        lines.push("");
+        lines.push(`Note : ${payload.delivery.note}`);
+      }
+      lines.push("");
+    }
+
+    lines.push("Produits :");
+    payload.items.forEach(it => lines.push(`- ${it.name} x${it.qty} = ${it.line}€`));
+
+    lines.push("");
+    lines.push(`Sous-total : ${payload.pricing.subtotal}€`);
+    if(payload.pricing.premiumFee > 0) lines.push(`Hors tournée : +${payload.pricing.premiumFee}€`);
+    lines.push(`TOTAL (hors distance) : ${payload.pricing.totalWithoutDistance}€`);
+    lines.push(`Frais distance : ${payload.pricing.distanceRule}`);
+    lines.push("");
+
+    if(payload.referral?.referrerCode){
+      lines.push(`Code partenaire : ${payload.referral.referrerCode}`);
+    } else {
+      lines.push("Code partenaire : (si tu en as un, écris-le ici)");
+    }
+
+    lines.push("");
+    lines.push("Paiement : main propre");
+    lines.push("");
+    lines.push("🎰 ROUE : gain valable uniquement après validation réelle du livreur.");
+    lines.push("Sans validation, aucun gain ne sera pris en compte.");
+
+    return lines.join("\n");
+  }
+
+  function confirmToWhatsApp(){
+    const raw = localStorage.getItem("lastOrderPayload");
+    if(!raw){ alert("Aucune commande trouvée."); return; }
+    const payload = JSON.parse(raw);
+
+    localStorage.setItem("lastOrderId", payload.orderId);
+    localStorage.setItem("lastOrderTs", String(Date.now()));
+
+    const msg = buildWhatsAppMessage(payload);
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  }
+
+  // =========================
+  // TOUR COUNTDOWN (69 + 71)
+  // =========================
+  let tourTicker = null;
+
+  function parseTodayTime(hhmm){
+    const [hh, mm] = hhmm.split(":").map(Number);
+    const d = new Date();
+    d.setHours(hh, mm, 0, 0);
+    return d;
+  }
+
+  function getNextTourInfo(){
+    const tours = ["16:00","19:00","21:30"];
+    const now = new Date();
+
+    for(const t of tours){
+      const dt = parseTodayTime(t);
+      if(dt.getTime() > now.getTime()){
+        return { label: t, time: dt };
+      }
+    }
+    const tomorrow = new Date(now.getTime() + 24*60*60*1000);
+    tomorrow.setHours(16,0,0,0);
+    return { label: "demain 16:00", time: tomorrow };
+  }
+
+  function fmtCountdown(ms){
+    const s = Math.max(0, Math.floor(ms/1000));
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    const ss = s%60;
+    const pad = (x)=>String(x).padStart(2,"0");
+    if(h > 0) return `${pad(h)}h${pad(m)}m`;
+    return `${pad(m)}m${pad(ss)}s`;
+  }
+
+  function startTourTicker(){
+    if(!TOUR_SECTORS.has(sector) || mode !== "delivery") return;
+
+    const labelEl = document.getElementById("nextTourLabel");
+    const cdEl = document.getElementById("nextTourCountdown");
+    if(tourTicker) clearInterval(tourTicker);
+
+    const tick = ()=>{
+      const info = getNextTourInfo();
+      labelEl.textContent = info.label;
+      cdEl.textContent = fmtCountdown(info.time.getTime() - Date.now());
+    };
+    tick();
+    tourTicker = setInterval(tick, 1000);
+  }
+
+  // =========================
+  // WHEEL: validation + weekly limit + roulette animation
+  // =========================
+  function canSpinThisWeek(){
+    const last = Number(localStorage.getItem("wheel:lastSpinTs") || "0");
+    if(!last) return true;
+    return (Date.now() - last) >= 7*24*60*60*1000;
+  }
+  function nextEligibleText(){
+    const last = Number(localStorage.getItem("wheel:lastSpinTs") || "0");
+    if(!last) return "Maintenant";
+    const remain = 7*24*60*60*1000 - (Date.now() - last);
+    if(remain <= 0) return "Maintenant";
+    const days = Math.ceil(remain / (24*60*60*1000));
+    return `${days} jour(s)`;
+  }
+  function makeWinCode(prefix="WIN"){
+    const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+    let s = "";
+    for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
+    return `${prefix}-${s}`;
+  }
+
+  const PRIZES = [
+    { id:"WIN_100_FILTER", label:"🎁 100 meuje filtre", p:0.05 },
+    { id:"WIN_90_OFF",     label:"🎁 -90% sur tout le catalogue", p:0.05 },
+    { id:"WIN_FREE_DEL",   label:"🎁 Livraison gratuite", p:10.0 },
+    { id:"WIN_STARTER",    label:"🎁 Starter pack", p:25.0 },
+    { id:"LOSE",           label:"😅 Merci pour votre participation", p:64.9 }
+  ];
+
+  const SEGMENTS = [
+    { id:"LOSE", label:"PERDU" },
+    { id:"WIN_STARTER", label:"STARTER" },
+    { id:"LOSE", label:"PERDU" },
+    { id:"WIN_FREE_DEL", label:"LIVRAISON" },
+    { id:"LOSE", label:"PERDU" },
+    { id:"WIN_90_OFF", label:"-90%" },
+    { id:"LOSE", label:"PERDU" },
+    { id:"WIN_100_FILTER", label:"100" }
+  ];
+
+  let wheelVerified = false;
+  let rouletteRunning = false;
+
+  const validateBtn = document.getElementById("validateBtn");
+  const verifiedBox = document.getElementById("verifiedBox");
+  const wheelNextInfo = document.getElementById("wheelNextInfo");
+  const rouletteWrap = document.getElementById("rouletteWrap");
+  const wheelMsg = document.getElementById("wheelMsg");
+  const wheelWinCode = document.getElementById("wheelWinCode");
+  const spinBtn = document.getElementById("spinBtn");
+
+  function resetWheelUI(){
+    wheelVerified = false;
+    rouletteRunning = false;
+    verifiedBox.classList.add("hidden");
+    rouletteWrap.classList.add("hidden");
+    wheelMsg.textContent = "";
+    wheelWinCode.textContent = "";
+    document.getElementById("wheelCode").value = "";
+    validateBtn.disabled = false;
+    spinBtn.disabled = false;
+    wheelNextInfo.textContent = nextEligibleText();
+    drawRoulette(0, 0);
+  }
+
+  function validateWheelCode(){
+    wheelMsg.textContent = "";
+    wheelWinCode.textContent = "";
+
+    if(!canSpinThisWeek()){
+      wheelMsg.textContent = "⛔ Déjà joué cette semaine.";
+      wheelNextInfo.textContent = nextEligibleText();
+      return;
+    }
+
+    const code = (document.getElementById("wheelCode").value || "").trim();
+    if(code !== VALIDATION_CODE){
+      wheelMsg.textContent = "❌ Code invalide. Attends la validation du livreur.";
+      return;
+    }
+
+    wheelVerified = true;
+    validateBtn.disabled = true;
+    verifiedBox.classList.remove("hidden");
+    rouletteWrap.classList.remove("hidden");
+    wheelNextInfo.textContent = "Après ce tour : 7 jours";
+    drawRoulette(0, 0);
+  }
+
+  function weightedPick(prizes){
+    const total = prizes.reduce((s,x)=>s+x.p,0);
+    let r = Math.random()*total;
+    for(const x of prizes){
+      r -= x.p;
+      if(r <= 0) return x;
+    }
+    return prizes[prizes.length-1];
+  }
+
+  function pickTargetSegment(prizeId){
+    const candidates = [];
+    for(let i=0;i<SEGMENTS.length;i++){
+      if(SEGMENTS[i].id === prizeId) candidates.push(i);
+    }
+    if(candidates.length === 0){
+      for(let i=0;i<SEGMENTS.length;i++){
+        if(SEGMENTS[i].id === "LOSE") candidates.push(i);
+      }
+    }
+    return candidates[Math.floor(Math.random()*candidates.length)];
+  }
+
+  const canvas = document.getElementById("rouletteCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function drawRoulette(wheelAngle, ballAngle){
+    const w = canvas.width, h = canvas.height;
+    const cx = w/2, cy = h/2;
+    const R = Math.min(w,h)/2 - 18;
+    const ringR = R;
+    const innerR = R * 0.62;
+
+    ctx.clearRect(0,0,w,h);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, ringR+10, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.fill();
+
+    const n = SEGMENTS.length;
+    const seg = (Math.PI*2)/n;
+
+    for(let i=0;i<n;i++){
+      const a0 = wheelAngle + i*seg;
+      const a1 = a0 + seg;
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,ringR,a0,a1);
+      ctx.closePath();
+
+      const isRed = i%2===0;
+      ctx.fillStyle = isRed ? "rgba(220,20,60,0.9)" : "rgba(20,160,80,0.9)";
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(255,255,255,0.15)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.save();
+      ctx.translate(cx,cy);
+      const mid = a0 + seg/2;
+      ctx.rotate(mid);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "rgba(255,255,255,0.95)";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText(SEGMENTS[i].label, ringR - 14, 6);
+      ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,innerR,0,Math.PI*2);
+    ctx.fillStyle = "rgba(0,0,0,0.45)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.12)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - ringR - 6);
+    ctx.lineTo(cx - 14, cy - ringR + 18);
+    ctx.lineTo(cx + 14, cy - ringR + 18);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fill();
+
+    const ballR = 7;
+    const trackR = ringR - 12;
+    const bx = cx + trackR * Math.cos(ballAngle);
+    const by = cy + trackR * Math.sin(ballAngle);
+
+    ctx.beginPath();
+    ctx.arc(bx+2, by+2, ballR, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(bx, by, ballR, 0, Math.PI*2);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,0.25)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  function spinRoulette(){
+    if(!wheelVerified){
+      wheelMsg.textContent = "Valide d'abord la commande.";
+      return;
+    }
+    if(!canSpinThisWeek()){
+      wheelMsg.textContent = "⛔ Déjà joué cette semaine.";
+      return;
+    }
+    if(rouletteRunning) return;
+
+    rouletteRunning = true;
+    spinBtn.disabled = true;
+    wheelMsg.textContent = "";
+    wheelWinCode.textContent = "";
+
+    const prize = weightedPick(PRIZES);
+    const targetIdx = pickTargetSegment(prize.id);
+
+    const n = SEGMENTS.length;
+    const seg = (Math.PI*2)/n;
+    const pointerAngle = -Math.PI/2;
+
+    const targetCenter = (targetIdx + 0.5) * seg;
+    let finalWheelAngle = pointerAngle - targetCenter;
+
+    const spins = 10 + Math.floor(Math.random()*6);
+    finalWheelAngle -= spins * Math.PI*2;
+
+    let wheelAngle = 0;
+    let ballAngle = Math.PI/2;
+
+    const start = performance.now();
+    const dur = 4200;
+
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+    const startWheel = wheelAngle;
+    const deltaWheel = finalWheelAngle - startWheel;
+
+    const startBall = ballAngle;
+    const deltaBall = (Math.PI*2) * (18 + Math.random()*6);
+
+    function frame(now){
+      const t = Math.min(1, (now - start)/dur);
+      const e = easeOutCubic(t);
+
+      wheelAngle = startWheel + deltaWheel * e;
+      const eb = 1 - Math.pow(1 - t, 2.2);
+      ballAngle = startBall + (-deltaBall) * eb;
+
+      drawRoulette(wheelAngle, ballAngle);
+
+      if(t < 1){
+        requestAnimationFrame(frame);
+      } else {
+        localStorage.setItem("wheel:lastSpinTs", String(Date.now()));
+        const winCode = (prize.id === "LOSE") ? "" : makeWinCode("WIN");
+        localStorage.setItem("wheel:lastPrize", prize.id);
+        localStorage.setItem("wheel:lastWinCode", winCode);
+
+        wheelMsg.textContent = prize.label + " ✅";
+        wheelWinCode.textContent = winCode ? `Code : ${winCode} (à vérifier à la remise)` : "";
+
+        rouletteRunning = false;
+        wheelVerified = false;
+        validateBtn.disabled = false;
+        verifiedBox.classList.add("hidden");
+        rouletteWrap.classList.add("hidden");
+        wheelNextInfo.textContent = nextEligibleText();
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  // =========================
+  // REFERRAL
+  // =========================
+  function ensureMyRefCode(){
+    let code = localStorage.getItem("ref:myCode");
+    if(!code){
+      const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+      let s="";
+      for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
+      code = `REF-${s}`;
+      localStorage.setItem("ref:myCode", code);
+    }
+    return code;
+  }
+  function getRefCount(){ return Number(localStorage.getItem("ref:count") || "0"); }
+  function setRefCount(n){ localStorage.setItem("ref:count", String(n)); }
+
+  function renderReferral(){
+    document.getElementById("myRefCode").textContent = ensureMyRefCode();
+    const c = getRefCount();
+    document.getElementById("refCount").textContent = String(c);
+
+    let status = "";
+    if(c >= 10) status = "✅ Palier atteint : -100€";
+    else if(c >= 5) status = "✅ Palier atteint : -30€ (prochain : 10 → -100€)";
+    else if(c >= 3) status = "✅ Palier atteint : -20€ (prochain : 5 → -30€)";
+    else status = `Encore ${3-c} filleul(s) pour débloquer -20€`;
+    document.getElementById("refStatus").textContent = status;
+  }
+
+  function shareReferral(){
+    const code = ensureMyRefCode();
+    const link = window.location.href;
+    const text =
+`🔥 Nouveau concept
+Viens voir le menu : ${link}
+
+Code partenaire : ${code}
+(à mettre dans la commande)`;
+    window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }
+
+  function sellerAddReferral(){
+    const pin = (document.getElementById("sellerPin").value || "").trim();
+    if(pin !== SELLER_PIN){
+      alert("PIN vendeur incorrect.");
+      return;
+    }
+    const c = getRefCount() + 1;
+    setRefCount(c);
+    document.getElementById("sellerPin").value = "";
+    renderReferral();
+    alert("✅ 1 filleul validé ajouté.");
+  }
+
+  // =========================
+  // CONTEST
+  // =========================
+  function sendContest(){
+    const link = (document.getElementById("contestLink").value || "").trim();
+    const platform = document.getElementById("contestPlatform").value;
+    const user = (document.getElementById("contestUser").value || "").trim();
+
+    if(!link){ alert("Mets le lien de ta vidéo."); return; }
+
+    const msg =
+`🏆 CONCOURS CRÉATEUR
+
+Plateforme : ${platform}
+Pseudo : ${user || "—"}
+Lien : ${link}`;
+
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  }
+
+  // =========================
+  // APPLY
+  // =========================
+  let applyKind = "shop";
+  function applyType(kind){
+    applyKind = kind;
+    document.getElementById("applyShopPill").classList.toggle("active", kind === "shop");
+    document.getElementById("applyDeliveryPill").classList.toggle("active", kind === "delivery");
+  }
+  function sendApply(){
+    const name = (document.getElementById("applyName").value || "").trim();
+    const city = (document.getElementById("applyCity").value || "").trim();
+    const avail = (document.getElementById("applyAvail").value || "").trim();
+    const msg = (document.getElementById("applyMsg").value || "").trim();
+
+    if(!name || !city || !msg){
+      alert("Remplis au minimum : Nom, Ville, Message.");
+      return;
+    }
+
+    const title = (applyKind === "shop") ? "🏪 CANDIDATURE OUVRIR SECTEUR" : "🚚 CANDIDATURE LIVREUR";
+    const text =
+`${title}
+
+Nom : ${name}
+Ville/Dépt : ${city}
+Dispos : ${avail || "—"}
+
+Message :
+${msg}`;
+
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  }
+
+  // =========================
+  // SUPPORT
+  // =========================
+  function sendSupport(){
+    const type = document.getElementById("supportType").value;
+    const oid = (document.getElementById("supportOrderId").value || "").trim();
+    const msg = (document.getElementById("supportMsg").value || "").trim();
+
+    if(!msg){ alert("Écris ton message."); return; }
+
+    const text =
+`📩 SERVICE CLIENT
+
+Type : ${type}
+ID commande : ${oid || "—"}
+
+Message :
+${msg}`;
+
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  }
+
+  // =========================
+  // SHARE SITE
+  // =========================
+  function shareSite(){
+    const link = window.location.href;
+    const code = ensureMyRefCode();
+    const text =
+`Découvre le menu :
+${link}
+
+Code partenaire : ${code}`;
+    window.location.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+  }
+
+  // Init
+  go("home");
+  drawRoulette(0, Math.PI/2);
+</script>
+
+</body>
+</html>
