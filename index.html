@@ -1,6 +1,3 @@
-<!-- =========================
-     PARTIE 1 / 3
-     ========================= -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -282,7 +279,6 @@
       box-shadow: var(--shadowSoft);
     }
 
-    /* Petit bloc "passage" pour le 69 (affiché dynamiquement) */
     .plate{
       width:100%;
       padding:10px 12px;
@@ -378,8 +374,7 @@
   <!-- DELIVERY OPTIONS -->
   <div class="card hidden" id="stepDeliveryOptions">
     <div class="center" style="font-weight:900; margin-bottom:8px;">Livraison</div>
-
-    <!-- ✅ bloc tournées (sert maintenant pour 69 ET 71) -->
+       
     <div id="delivery71Tours" class="hidden">
       <div class="okBox" style="margin-bottom:10px;">
         <div style="font-weight:900;">🕒 Prochaine tournée : <span id="nextTourLabel">—</span></div>
@@ -401,7 +396,6 @@
         <div class="pill" id="premiumPill" onclick="togglePremium()">★ Hors tournée +60€</div>
       </div>
 
-      <!-- ✅ infos passage 69 (affiché uniquement quand secteur=69) -->
       <div id="delivery69Passage" class="plate hidden" style="margin-top:10px;">
         <div class="plateTitle">Heures de passage (exemples)</div>
 
@@ -420,7 +414,6 @@
       </div>
 
       <div class="muted" style="margin-top:10px;">
-        Si hors tournée, tu peux indiquer une heure souhaitée dans “Note”.
       </div>
     </div>
 
@@ -434,7 +427,6 @@
 
     <div class="muted" style="margin-top:10px;">
       Frais distance : <b>10€ / 15km</b> (calcul vendeur).<br/>
-      La direction se réserve le droit d’ajouter des frais selon km.
     </div>
 
     <button class="btn" onclick="goToMenu()">Continuer</button>
@@ -647,8 +639,7 @@
 
 </div>
 
-<script><!-- =========================
-     PARTIE 2 / 3
+<script>
      ========================= -->
   // =========================
   // CONFIG
@@ -948,11 +939,8 @@
     } else if(sector === "69"){
       hideAll(); stepRubric.classList.remove("hidden");
     } else {
-      hideAll(); document.getElementById("stepSector").classList.remove("hidden");
-    }
-  }
-<!-- =========================
-     PARTIE 3 / 3
+      hideAll(); document.getElementById("stepSector").classList.remove(
+
      ========================= -->
   function clearCart(){
     cart.clear();
